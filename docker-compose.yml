@@ -1,0 +1,60 @@
+version: "2"
+
+services:
+  #https://hub.docker.com/_/nginx/
+  proxy:
+    container_name: cjp.local
+    image: nginx:1.10-alpine
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx/logs:/var/log/nginx
+    depends_on: #to force proxy to start last, add all other services here
+      - cjoc
+      - cje-test
+
+  #https://hub.docker.com/r/cloudbees/jenkins-operations-center/
+  cjoc:
+    container_name: cjoc
+    image: cloudbees/jenkins-operations-center:1.625.18.5
+    environment:
+      #TODO set Jenkins URL automatically
+      JENKINS_HA: "false"
+      JAVA_OPTS: "-Dhudson.TcpSlaveAgentListener.hostName=cjoc -Dhudson.udp=-1 -Dhudson.DNSMultiCast.disabled=true -Djava.awt.headless=true -Xmx1024m -Xms256m"
+      #https://wiki.jenkins-ci.org/display/JENKINS/Features+controlled+by+system+properties
+      JENKINS_OPTS: "--prefix=/cjoc"
+    volumes:
+      - ./cjoc-data:/var/jenkins_home
+
+  #https://hub.docker.com/r/cloudbees/jenkins-enterprise/
+  cje-test:
+    container_name: cje-test
+    image: cloudbees/jenkins-enterprise:1.651.3.1
+    environment:
+      JENKINS_HA: "false"
+      JAVA_OPTS: "-Dhudson.udp=-1 -Dhudson.DNSMultiCast.disabled=true -Djava.awt.headless=true -Xmx2048m -Xms256m"
+      JENKINS_OPTS: "--prefix=/cje-test"
+    ports:
+      - "50001:50000" #jnlp (agent)
+    volumes:
+      - ./cje-test-data:/var/jenkins_home
+
+# #https://hub.docker.com/r/cloudbees/jenkins-enterprise/
+# cje-prod:
+#     container_name: cje-prod
+#     image: cloudbees/jenkins-enterprise:1.642.18.2
+#     environment:
+#       JAVA_OPTS: "-Dhudson.udp=-1 -Dhudson.DNSMultiCast.disabled=true -Djava.awt.headless=true -Xmx2048m -Xms256m -XX:MaxPermSize=1024m"
+#       JENKINS_OPTS: "--httpPort=8082"
+#     ports:
+#       - "8082:8082" #http
+#       - "50002:50000" #jnlp (agent)
+#     volumes:
+#       - ./cje-prod-data:/var/jenkins_home
+#
+# #https://hub.docker.com/r/cloudbees/jnlp-slave-with-java-build-tools/
+# jnlp-slave-with-java-build-tools:
+#   container_name: jnlp-slave-with-java-build-tools
+#   image: cloudbees/jnlp-slave-with-java-build-tools:1.0.0
