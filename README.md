@@ -34,7 +34,7 @@ or
 
     docker exec -it <containerId> ping cjp.local
 
-lastly, note data directories (nginx logs, jenkins_home(s)) are mapped to the working project directory
+lastly, note that data directories (nginx logs, jenkins_home(s)) are mapped to the working project directory
 
 ## Post-startup
 go to http://cjp.local
