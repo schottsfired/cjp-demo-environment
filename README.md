@@ -41,12 +41,10 @@ go to http://cjp.local
 
 activate it
 
-manage jenkins > configure system
+manage jenkins > configure system and set Jenkins URL to http://cjp.local/cjoc
 
-set Jenkins URL to http://cjp.local/cjoc
+add a client master item with URL  http://cjp.local/cje-test
 
-add client master http://cjp.local/cje-test
-
-upgrade plugins (consider mock security realm)
+upgrade plugins (also consider installing mock-security-realm)
 
 enable security/SSO
