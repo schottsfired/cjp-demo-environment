@@ -46,7 +46,7 @@ services:
     image: cloudbees/jnlp-slave-with-java-build-tools:1.0.0
     environment:
       JENKINS_URL: "http://cjp.local/cjoc"
-      JENKINS_TUNNEL: "cjoc:50000"
+      #JENKINS_TUNNEL: "cjoc:50000"
     command: ["31e252ff8e136e8e6b472f56932aea7408af8c190ea4692b0f093b2d88c576fd", "jnlp-shared-cloud"]
 
 # #https://hub.docker.com/r/cloudbees/jenkins-enterprise/
