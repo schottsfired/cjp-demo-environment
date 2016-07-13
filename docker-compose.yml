@@ -14,6 +14,7 @@ services:
     depends_on: #to force proxy to start last, add all other services here
       - cjoc
       - cje-test
+      - cje-prod
       - shared-agent
 
   #https://hub.docker.com/r/cloudbees/jenkins-operations-center/
@@ -31,11 +32,23 @@ services:
       - ./cjoc-data:/var/jenkins_home
 
   #https://hub.docker.com/r/cloudbees/jenkins-enterprise/
+  cje-prod:
+    container_name: cje-prod
+    image: cloudbees/jenkins-enterprise:1.651.3.1
+    environment:
+      JENKINS_SLAVE_AGENT_PORT: "50001"
+      JENKINS_HA: "false"
+      JAVA_OPTS: "-Dhudson.TcpSlaveAgentListener.hostName=cje-prod -Dhudson.udp=-1 -Dhudson.DNSMultiCast.disabled=true -Djava.awt.headless=true -Xmx2048m -Xms256m"
+      JENKINS_OPTS: "--prefix=/cje-prod"
+    volumes:
+      - ./cje-prod-data:/var/jenkins_home
+
+  #https://hub.docker.com/r/cloudbees/jenkins-enterprise/
   cje-test:
     container_name: cje-test
     image: cloudbees/jenkins-enterprise:1.651.3.1
     environment:
-      JENKINS_SLAVE_AGENT_PORT: "50001"
+      JENKINS_SLAVE_AGENT_PORT: "50002"
       JENKINS_HA: "false"
       JAVA_OPTS: "-Dhudson.TcpSlaveAgentListener.hostName=cje-test -Dhudson.udp=-1 -Dhudson.DNSMultiCast.disabled=true -Djava.awt.headless=true -Xmx2048m -Xms256m"
       JENKINS_OPTS: "--prefix=/cje-test"
@@ -51,16 +64,3 @@ services:
     environment:
       JENKINS_URL: "http://cjp.local/cjoc"
     command: ["31e252ff8e136e8e6b472f56932aea7408af8c190ea4692b0f093b2d88c576fd", "jnlp-shared-cloud"]
-
-# #https://hub.docker.com/r/cloudbees/jenkins-enterprise/
-# cje-prod:
-#     container_name: cje-prod
-#     image: cloudbees/jenkins-enterprise:1.642.18.2
-#     environment:
-#       JAVA_OPTS: "-Dhudson.udp=-1 -Dhudson.DNSMultiCast.disabled=true -Djava.awt.headless=true -Xmx2048m -Xms256m -XX:MaxPermSize=1024m"
-#       JENKINS_OPTS: "--httpPort=8082"
-#     ports:
-#       - "8082:8082" #http
-#       - "50002:50000" #jnlp (agent)
-#     volumes:
-#       - ./cje-prod-data:/var/jenkins_home

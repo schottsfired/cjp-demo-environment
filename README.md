@@ -28,11 +28,17 @@ and wait a little while :)
 
 you can restart services with e.g.:
 
-    docker-compose restart proxy
+    docker-compose restart shared-agent
 
 see docker-compose.yml for list of available services
 
 use ctrl+c to stop the environment
+
+and don't forget to use:
+
+    docker-compose down
+
+for a "hard" reset when e.g. networking changes.
 
 run commands on containers with:
 
@@ -46,13 +52,15 @@ lastly, note that data directories (nginx logs, jenkins_home(s)) are mapped to t
 
 ## Post-startup tasks
 
-go to http://cjp.local
+go to http://cjp.local/cjoc
 
 activate it
 
 manage jenkins > configure system and set Jenkins URL to http://cjp.local/cjoc
 
-add a client master item with URL  http://cjp.local/cje-test
+add a client master item (cje-prod) with URL http://cjp.local/cje-prod
+
+add a client master item (cje-test) with URL  http://cjp.local/cje-test
 
 add a shared cloud item named 'jnlp-shared-cloud' at the root of cjoc
 
