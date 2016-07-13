@@ -1,7 +1,9 @@
 # Docker Compose (v2) Demo Environment for CloudBees Jenkins Platform (CJP)
 
 ## Prerequisites
-docker version 1.12.0-rc3-beta18 (build: 9996) or above
+built on Docker for OSX 1.12.0-rc3-beta18 (build: 9996)
+
+boot2docker/docker-machine v1.12.0-rc3 should also work
 
 increase limits in Docker preferences (CPU: 3, Memory: 6GB)
 
@@ -22,7 +24,7 @@ you can restart services with e.g.:
 
     docker-compose restart proxy
 
-see docker-compose.yml for list of services
+see docker-compose.yml for list of available services
 
 use ctrl+c to stop the environment
 
