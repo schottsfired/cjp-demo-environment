@@ -1,6 +1,7 @@
 # Docker Compose (v2) Demo Environment for CloudBees Jenkins Platform (CJP)
 
 ## Prerequisites
+
 built on Docker for OSX 1.12.0-rc3-beta18 (build: 9996)
 
 boot2docker/docker-machine v1.12.0-rc3 should also work
@@ -16,9 +17,14 @@ add this entry:
     127.0.0.1 cjp.local
 
 ## How to run
+
 simply,
 
     docker-compose up
+
+and wait a little while :)
+
+## Pro tips
 
 you can restart services with e.g.:
 
@@ -38,7 +44,8 @@ or
 
 lastly, note that data directories (nginx logs, jenkins_home(s)) are mapped to the working project directory
 
-## Post-startup
+## Post-startup tasks
+
 go to http://cjp.local
 
 activate it
@@ -47,6 +54,10 @@ manage jenkins > configure system and set Jenkins URL to http://cjp.local/cjoc
 
 add a client master item with URL  http://cjp.local/cje-test
 
-upgrade plugins (also consider installing mock-security-realm)
+add a shared cloud item named 'jnlp-shared-cloud' at the root of cjoc
 
-enable security/SSO
+start the jnlp shared agent (again)
+
+    docker-compose start shared-agent
+
+etc.

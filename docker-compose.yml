@@ -7,7 +7,7 @@ services:
     image: nginx:1.10-alpine
     ports:
       - "80:80"
-      - "443:443"
+      #- "443:443"
     volumes:
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
       - ./nginx/logs:/var/log/nginx
@@ -22,6 +22,7 @@ services:
     image: cloudbees/jenkins-operations-center:1.625.18.5
     environment:
       #TODO set Jenkins URL automatically
+      JENKINS_SLAVE_AGENT_PORT: "50000"
       JENKINS_HA: "false"
       JAVA_OPTS: "-Dhudson.TcpSlaveAgentListener.hostName=cjoc -Dhudson.udp=-1 -Dhudson.DNSMultiCast.disabled=true -Djava.awt.headless=true -Xmx1024m -Xms256m"
       #https://wiki.jenkins-ci.org/display/JENKINS/Features+controlled+by+system+properties
@@ -34,19 +35,21 @@ services:
     container_name: cje-test
     image: cloudbees/jenkins-enterprise:1.651.3.1
     environment:
+      JENKINS_SLAVE_AGENT_PORT: "50001"
       JENKINS_HA: "false"
-      JAVA_OPTS: "-Dhudson.udp=-1 -Dhudson.DNSMultiCast.disabled=true -Djava.awt.headless=true -Xmx2048m -Xms256m"
+      JAVA_OPTS: "-Dhudson.TcpSlaveAgentListener.hostName=cje-test -Dhudson.udp=-1 -Dhudson.DNSMultiCast.disabled=true -Djava.awt.headless=true -Xmx2048m -Xms256m"
       JENKINS_OPTS: "--prefix=/cje-test"
     volumes:
       - ./cje-test-data:/var/jenkins_home
 
   #https://hub.docker.com/r/cloudbees/jnlp-slave-with-java-build-tools/
+  #disregard initial startup error, we can start it later
+  #wait for https://github.com/docker/compose/issues/1896
   shared-agent:
     container_name: shared-agent
     image: cloudbees/jnlp-slave-with-java-build-tools:1.0.0
     environment:
       JENKINS_URL: "http://cjp.local/cjoc"
-      #JENKINS_TUNNEL: "cjoc:50000"
     command: ["31e252ff8e136e8e6b472f56932aea7408af8c190ea4692b0f093b2d88c576fd", "jnlp-shared-cloud"]
 
 # #https://hub.docker.com/r/cloudbees/jenkins-enterprise/
