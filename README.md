@@ -76,6 +76,8 @@ add a client master item (cje-test) with URL  http://cjp.local/cje-test
 
 add a shared cloud item named 'jnlp-shared-cloud' at the root of cjoc
 
+update your docker-compose.yml shared-cloud 'command:' accordingly
+
 start the jnlp shared agent (again):
 
     docker-compose start shared-agent
