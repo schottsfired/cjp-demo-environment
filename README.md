@@ -81,3 +81,7 @@ start the jnlp shared agent (again):
     docker-compose start shared-agent
 
 etc.
+
+## TODO
+
+bootstrap seed job that loads "golden" jobs from any GH repo
