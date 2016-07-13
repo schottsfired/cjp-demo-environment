@@ -8,7 +8,7 @@ boot2docker/docker-machine v1.12.0-rc3 should also work
 
 increase limits in Docker preferences (CPU: 3, Memory: 6GB)
 
-open terminal and type
+open terminal and type:
 
     sudo vi /etc/hosts
 
@@ -18,7 +18,7 @@ add this entry:
 
 ## How to run
 
-simply,
+simply:
 
     docker-compose up
 
@@ -34,11 +34,11 @@ see docker-compose.yml for list of available services
 
 use ctrl+c to stop the environment
 
-run commands on containers with
+run commands on containers with:
 
     docker exec -it <containerId> bash
 
-or
+or:
 
     docker exec -it <containerId> ping cjp.local
 
