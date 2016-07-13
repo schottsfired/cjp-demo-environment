@@ -1,5 +1,17 @@
 # Docker Compose (v2) Demo Environment for CloudBees Jenkins Platform (CJP)
 
+## Available Services
+
+Nginx reverse proxy
+
+CloudBees Jenkins Operations Center (CJOC)
+
+CloudBees Jenkins Enterprise (CJE) "test" Environment
+
+CloudBees Jenkins Enterprise (CJE) "prod" Environment
+
+JNLP Shared Agent
+
 ## Prerequisites
 
 built on Docker for OSX 1.12.0-rc3-beta18 (build: 9996)
