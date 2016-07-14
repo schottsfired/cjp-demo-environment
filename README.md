@@ -72,7 +72,7 @@ go to http://cjp.local/cjoc
 
 activate it
 
-manage jenkins > configure system and set Jenkins URL to http://cjp.local/cjoc
+manage jenkins > configure system and set Jenkins URL to http://cjp.local/cjoc (or just _save_ the config if it's already correct)
 
 add a client master item (cje-prod) with URL http://cjp.local/cje-prod
 
@@ -86,7 +86,7 @@ update your docker-compose.yml shared-cloud 'command:' accordingly
 
 start the jnlp shared agent (again):
 
-    docker-compose start shared-agent
+    docker-compose restart shared-agent-jnlp
 
 ### Connect SSH Shared Agent
 
@@ -116,6 +116,6 @@ Create a new shared agent in CJOC with your new credentials, host 'shared-agent-
 
 ## TODO
 
-bootstrap seed job that loads "golden" jobs from any GH repo
+bootstrap a seed job that loads "golden" jobs from any GH repo
 
 get JNLP/SSH shared agent 'command:' out of docker-compose
