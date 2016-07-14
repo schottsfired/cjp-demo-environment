@@ -72,7 +72,7 @@ go to http://cjp.local/cjoc
 
 activate it
 
-manage jenkins > configure system and set Jenkins URL to http://cjp.local/cjoc
+manage jenkins > configure system and set Jenkins URL to http://cjp.local/cjoc. By default the URL is setup, but you will need to hit 'Save'. 
 
 add a client master item (cje-prod) with URL http://cjp.local/cje-prod
 
