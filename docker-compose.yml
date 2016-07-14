@@ -15,7 +15,8 @@ services:
       - cjoc
       - cje-test
       - cje-prod
-      - shared-agent
+      - shared-agent-ssh
+      - shared-agent-jnlp
 
   #https://hub.docker.com/r/cloudbees/jenkins-operations-center/
   cjoc:
@@ -55,12 +56,20 @@ services:
     volumes:
       - ./cje-test-data:/var/jenkins_home
 
+  #https://hub.docker.com/r/jenkinsci/ssh-slave/
+  shared-agent-ssh:
+    container_name: shared-agent-ssh
+    image: jenkinsci/ssh-slave
+    #command is specific to your env.. see README
+    command: ["ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC693QYbxxSveSPC12Q+CvjWrRExV1kNgH3an6v5+tI3n2swoGhXEDelGGlJLQQC6wSm2v6RV6kqCnhg9Pz7Tfm5vHf5MlmbEXr8rkwau1ZowP6/iQwLlLSz/35tGh3MeZo3bTyu5nUMCxFDlG7ZQX6JxeOY3EuqhsGK+qe1BmMN/6oCAsvxZv3ehUzs+SzYkCqrQzdlkh6gT368KqdxWipkpmK6uyIpqon7ptzJB0fMWdexP1GxuicovxE45mr61FdiqgrEemCjQbHTcU/aKv8mbEDm5IR5x/YB7j/z1fZPLr7gOg2VJJN2eNqD/JDcyJv9V02PaxZX+dE7xzOzD5D jenkins@471714444c1d"]
+
   #https://hub.docker.com/r/cloudbees/jnlp-slave-with-java-build-tools/
   #disregard initial startup error, we can start it later
   #wait for https://github.com/docker/compose/issues/1896
-  shared-agent:
-    container_name: shared-agent
+  shared-agent-jnlp:
+    container_name: shared-agent-jnlp
     image: cloudbees/jnlp-slave-with-java-build-tools:1.0.0
     environment:
       JENKINS_URL: "http://cjp.local/cjoc"
+    #command is specific to your env.. see README
     command: ["31e252ff8e136e8e6b472f56932aea7408af8c190ea4692b0f093b2d88c576fd", "jnlp-shared-cloud"]

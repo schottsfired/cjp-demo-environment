@@ -2,15 +2,17 @@
 
 ## Included Services
 
-Nginx reverse proxy
+Nginx reverse proxy at http://cjp.local
 
-CloudBees Jenkins Operations Center (CJOC)
+CloudBees Jenkins Operations Center (CJOC) at http://cjp.local/cjoc
 
-CloudBees Jenkins Enterprise (CJE) "test" Environment
+CloudBees Jenkins Enterprise (CJE) "test" Environment at http://cjp.local/cje-test
 
-CloudBees Jenkins Enterprise (CJE) "prod" Environment
+CloudBees Jenkins Enterprise (CJE) "prod" Environment at http://cjp.local/cje-prod
 
-JNLP Shared Agent
+SSH Shared Agent at ssh-shared-agent:4444
+
+JNLP Shared Agent connected manually (would be automated in real world)
 
 ## Prerequisites
 
@@ -64,6 +66,8 @@ lastly, note that data directories (nginx logs, jenkins_home(s)) are mapped to t
 
 ## Post-startup tasks
 
+### Connect Client Masters
+
 go to http://cjp.local/cjoc
 
 activate it
@@ -74,6 +78,8 @@ add a client master item (cje-prod) with URL http://cjp.local/cje-prod
 
 add a client master item (cje-test) with URL  http://cjp.local/cje-test
 
+### Connect JNLP Shared Agent
+
 add a shared cloud item named 'jnlp-shared-cloud' at the root of cjoc
 
 update your docker-compose.yml shared-cloud 'command:' accordingly
@@ -82,8 +88,34 @@ start the jnlp shared agent (again):
 
     docker-compose start shared-agent
 
-etc.
+### Connect SSH Shared Agent
+
+exec into the CJOC container and generate a key pair:
+
+    docker exec -it cjoc bash
+
+    ssh-keygen
+
+Stick with the defaults and choose a password (or leave blank)
+
+Then copy your public and private keys to a text editor:
+
+    cd /var/jenkins_home/.ssh
+
+    cat id_rsa
+
+    cat id_rsa.pub
+
+In CJOC, click "Credentials" and add your SSH private key
+
+In docker-compose.yml add your public key to the 'command:' and restart the container:
+
+    docker-compose restart shared-agent-ssh
+
+Create a new shared agent in CJOC with your new credentials, host 'shared-agent-ssh', and a Remote FS root of /home/jenkins
 
 ## TODO
 
 bootstrap seed job that loads "golden" jobs from any GH repo
+
+get JNLP/SSH shared agent 'command:' out of docker-compose
