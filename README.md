@@ -6,13 +6,13 @@ Nginx reverse proxy at http://cjp.local
 
 CloudBees Jenkins Operations Center (CJOC) at http://cjp.local/cjoc
 
-CloudBees Jenkins Enterprise (CJE) "test" Environment at http://cjp.local/cje-test
+CloudBees Jenkins Enterprise (CJE) "test" at http://cjp.local/cje-test
 
-CloudBees Jenkins Enterprise (CJE) "prod" Environment at http://cjp.local/cje-prod
+CloudBees Jenkins Enterprise (CJE) "prod" at http://cjp.local/cje-prod
 
-SSH Shared Agent at ssh-shared-agent:4444
+SSH Shared Agent (see Post-startup tasks)
 
-JNLP Shared Agent connected manually (would be automated in real world)
+JNLP Shared Agent (see Post-startup tasks)
 
 ## Prerequisites
 
