@@ -84,9 +84,9 @@ add a shared cloud item named 'jnlp-shared-cloud' at the root of cjoc
 
 update your docker-compose.yml shared-cloud 'command:' accordingly
 
-start the jnlp shared agent (again):
+start the jnlp shared agent:
 
-    docker-compose restart shared-agent-jnlp
+    docker-compose start shared-agent-jnlp
 
 ### Connect SSH Shared Agent
 
