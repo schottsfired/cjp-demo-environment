@@ -4,11 +4,11 @@
 
 Nginx reverse proxy at http://cjp.local
 
-CloudBees Jenkins Operations Center (CJOC) at http://cjp.local/cjoc
+CloudBees Jenkins Operations Center (CJOC) v16.06 at http://cjp.local/cjoc
 
-CloudBees Jenkins Enterprise (CJE) "test" at http://cjp.local/cje-test
+CloudBees Jenkins Enterprise (CJE) v16.06 "test" at http://cjp.local/cje-test
 
-CloudBees Jenkins Enterprise (CJE) "prod" at http://cjp.local/cje-prod
+CloudBees Jenkins Enterprise (CJE) v16.06 "prod" at http://cjp.local/cje-prod
 
 Shared SSH Agent
 
