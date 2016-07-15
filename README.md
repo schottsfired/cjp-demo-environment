@@ -108,7 +108,7 @@ In `` docker-compose.yml `` add your public key to the 'command:' and restart th
 
 Create a Shared SSH Agent in CJOC with your new credentials, host: `` shared-agent-ssh ``, and a Remote FS root of `` /home/jenkins ``
 
-## TODO
+## TODO (in branches)
 
 use new Docker preferences pane item to move away from cjp.local
 
