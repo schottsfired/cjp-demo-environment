@@ -42,27 +42,23 @@ and wait a little while :)
 
 you can restart services with e.g.:
 
-    docker-compose restart shared-agent
+    docker-compose restart cje-test
 
 see docker-compose.yml for list of available services
 
-use ctrl+c to stop the environment
-
-and don't forget to use:
+use ctrl+c to stop the environment, or better, use:
 
     docker-compose down
 
-for a "hard" reset when e.g. networking changes.
+open an interactive terminal on a container (service) with:
 
-run commands on containers with:
+    docker exec -it <containerIdOrServiceName> bash
 
-    docker exec -it <containerId> bash
+or run a command on a container immediately, e.g. to ping another container:
 
-or:
+    docker exec -it <containerIdOrServiceName> ping cjp.proxy
 
-    docker exec -it <containerId> ping cjp.local
-
-lastly, note that data directories (nginx logs, jenkins_home(s)) are mapped to the working project directory
+lastly, important directories like nginx logs, jenkins_home(s), etc. are volume mapped to the working project directory
 
 ## Post-startup tasks
 
@@ -80,9 +76,9 @@ add a client master item (cje-test) with URL  http://cjp.local/cje-test
 
 ### Connect JNLP Shared Agent
 
-add a shared cloud item named 'jnlp-shared-cloud' at the root of cjoc
+add a shared cloud named e.g. 'jnlp-shared-cloud' at the root of cjoc
 
-update your docker-compose.yml shared-cloud 'command:' accordingly
+update your docker-compose.yml shared-cloud 'command:' with the on-screen instructions
 
 start the jnlp shared agent:
 
