@@ -10,15 +10,13 @@ CloudBees Jenkins Enterprise (CJE) "test" at http://cjp.local/cje-test
 
 CloudBees Jenkins Enterprise (CJE) "prod" at http://cjp.local/cje-prod
 
-SSH Shared Agent (see Post-startup tasks)
+Shared SSH Agent
 
-JNLP Shared Agent (see Post-startup tasks)
+Shared JNLP Cloud with Java Build Tools (OpenJDK 8, Firefox, Selenium, etc.)
 
 ## Prerequisites
 
-built on Docker for OSX 1.12.0-rc3-beta18 (build: 9996)
-
-boot2docker/docker-machine v1.12.0-rc3 should also work
+built on [Docker for Mac Beta](https://blog.docker.com/2016/03/docker-for-mac-windows-beta/)
 
 increase limits in Docker preferences (CPU: 3, Memory: 6GB)
 
@@ -44,7 +42,7 @@ you can restart services with e.g.:
 
     docker-compose restart cje-test
 
-see docker-compose.yml for list of available services
+see `` docker-compose.yml `` for list of available services
 
 use ctrl+c to stop the environment, or better, use:
 
@@ -52,11 +50,11 @@ use ctrl+c to stop the environment, or better, use:
 
 open an interactive terminal on a container (service) with:
 
-    docker exec -it <containerIdOrServiceName> bash
+    docker exec -it <serviceName> bash
 
 or run a command on a container immediately, e.g. to ping another container:
 
-    docker exec -it <containerIdOrServiceName> ping cjp.proxy
+    docker exec -it <serviceName> ping cjp.proxy
 
 lastly, important directories like nginx logs, jenkins_home(s), etc. are volume mapped to the working project directory
 
@@ -78,7 +76,7 @@ add a client master item (cje-test) with URL  http://cjp.local/cje-test
 
 add a shared cloud named e.g. 'jnlp-shared-cloud' at the root of cjoc
 
-update your docker-compose.yml shared-cloud 'command:' with the on-screen instructions
+update your `` docker-compose.yml `` shared-cloud 'command:' with the on-screen instructions
 
 start the jnlp shared agent:
 
@@ -104,13 +102,15 @@ Then copy your public and private keys to a text editor:
 
 In CJOC, click "Credentials" and add your SSH private key
 
-In docker-compose.yml add your public key to the 'command:' and restart the container:
+In `` docker-compose.yml `` add your public key to the 'command:' and restart the container:
 
     docker-compose restart shared-agent-ssh
 
-Create a new shared agent in CJOC with your new credentials, host 'shared-agent-ssh', and a Remote FS root of /home/jenkins
+Create a Shared SSH Agent in CJOC with your new credentials, host: `` shared-agent-ssh ``, and a Remote FS root of `` /home/jenkins ``
 
 ## TODO
+
+use new Docker preferences pane item to move away from cjp.local
 
 bootstrap a seed job that loads "golden" jobs from any GH repo
 
