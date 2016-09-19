@@ -11,65 +11,89 @@ services:
     volumes:
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
       - ./nginx/logs:/var/log/nginx
-    depends_on: #to force proxy to start last, add all other services here
+    depends_on: #to force proxy to start behind
       - cjoc
       - cje-test
       - cje-prod
-      - shared-agent-ssh
-      - shared-agent-jnlp
 
   #https://hub.docker.com/r/cloudbees/jenkins-operations-center/
   cjoc:
     container_name: cjoc
-    image: cloudbees/jenkins-operations-center:1.625.18.5
+    image: cloudbees/jenkins-operations-center:2.7.19.1
     environment:
       #TODO set Jenkins URL automatically
       JENKINS_SLAVE_AGENT_PORT: "50000"
       JENKINS_HA: "false"
-      JAVA_OPTS: "-Dhudson.TcpSlaveAgentListener.hostName=cjoc -Dhudson.udp=-1 -Dhudson.DNSMultiCast.disabled=true -Djava.awt.headless=true -Xmx1024m -Xms256m"
+      JAVA_OPTS: "-Dhudson.TcpSlaveAgentListener.hostName=cjoc -Dhudson.udp=-1 -Dhudson.DNSMultiCast.disabled=true -Djava.awt.headless=true -Xmx1024m -Xms256m -Dorg.apache.commons.jelly.tags.fmt.timeZone=America/New_York"
       #https://wiki.jenkins-ci.org/display/JENKINS/Features+controlled+by+system+properties
       JENKINS_OPTS: "--prefix=/cjoc"
     volumes:
-      - ./cjoc-data:/var/jenkins_home
+      - ./data/cjoc:/var/jenkins_home
 
   #https://hub.docker.com/r/cloudbees/jenkins-enterprise/
   cje-prod:
     container_name: cje-prod
-    image: cloudbees/jenkins-enterprise:1.651.3.1
+    image: cloudbees/jenkins-enterprise:2.7.19.1
     environment:
       JENKINS_SLAVE_AGENT_PORT: "50001"
       JENKINS_HA: "false"
-      JAVA_OPTS: "-Dhudson.TcpSlaveAgentListener.hostName=cje-prod -Dhudson.udp=-1 -Dhudson.DNSMultiCast.disabled=true -Djava.awt.headless=true -Xmx2048m -Xms256m"
+      JAVA_OPTS: "-Dhudson.TcpSlaveAgentListener.hostName=cje-prod -Dhudson.udp=-1 -Dhudson.DNSMultiCast.disabled=true -Djava.awt.headless=true -Xmx2048m -Xms256m -Dorg.apache.commons.jelly.tags.fmt.timeZone=America/New_York"
       JENKINS_OPTS: "--prefix=/cje-prod"
     volumes:
-      - ./cje-prod-data:/var/jenkins_home
+      - ./data/cje-prod:/var/jenkins_home
+    volumes_from:
+      - ssh-slave
 
   #https://hub.docker.com/r/cloudbees/jenkins-enterprise/
   cje-test:
     container_name: cje-test
-    image: cloudbees/jenkins-enterprise:1.651.3.1
+    build:
+      context: ./docker/
+      dockerfile: Dockerfile.cje-test
     environment:
       JENKINS_SLAVE_AGENT_PORT: "50002"
       JENKINS_HA: "false"
-      JAVA_OPTS: "-Dhudson.TcpSlaveAgentListener.hostName=cje-test -Dhudson.udp=-1 -Dhudson.DNSMultiCast.disabled=true -Djava.awt.headless=true -Xmx2048m -Xms256m"
+      JAVA_OPTS: "-Dhudson.TcpSlaveAgentListener.hostName=cje-test -Dhudson.udp=-1 -Dhudson.DNSMultiCast.disabled=true -Djava.awt.headless=true -Xmx2048m -Xms256m -Dorg.apache.commons.jelly.tags.fmt.timeZone=America/New_York"
       JENKINS_OPTS: "--prefix=/cje-test"
     volumes:
-      - ./cje-test-data:/var/jenkins_home
+      - ./data/cje-test:/var/jenkins_home
+    volumes_from:
+      - ssh-slave
 
   #https://hub.docker.com/r/jenkinsci/ssh-slave/
-  shared-agent-ssh:
-    container_name: shared-agent-ssh
-    image: jenkinsci/ssh-slave
+  ssh-slave:
+    container_name: ssh-slave
+    build:
+      context: ./docker/
+      dockerfile: Dockerfile.ssh-slave
     #command is specific to your env.. see README
     command: ["ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC693QYbxxSveSPC12Q+CvjWrRExV1kNgH3an6v5+tI3n2swoGhXEDelGGlJLQQC6wSm2v6RV6kqCnhg9Pz7Tfm5vHf5MlmbEXr8rkwau1ZowP6/iQwLlLSz/35tGh3MeZo3bTyu5nUMCxFDlG7ZQX6JxeOY3EuqhsGK+qe1BmMN/6oCAsvxZv3ehUzs+SzYkCqrQzdlkh6gT368KqdxWipkpmK6uyIpqon7ptzJB0fMWdexP1GxuicovxE45mr61FdiqgrEemCjQbHTcU/aKv8mbEDm5IR5x/YB7j/z1fZPLr7gOg2VJJN2eNqD/JDcyJv9V02PaxZX+dE7xzOzD5D jenkins@471714444c1d"]
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock #for docker.image.inside
+      - /Users/David/.m2:/home/jenkins/.m2 #to persist and share the precious maven cache
 
   #https://hub.docker.com/r/cloudbees/jnlp-slave-with-java-build-tools/
   #disregard initial startup error, we can start it later
   #wait for https://github.com/docker/compose/issues/1896
-  shared-agent-jnlp:
-    container_name: shared-agent-jnlp
-    image: cloudbees/jnlp-slave-with-java-build-tools:1.0.0
+  jnlp-slave:
+    container_name: jnlp-slave
+    build:
+      context: ./docker/
+      dockerfile: Dockerfile.jnlp-slave
     environment:
       JENKINS_URL: "http://cjp.local/cjoc"
     #command is specific to your env.. see README
-    command: ["31e252ff8e136e8e6b472f56932aea7408af8c190ea4692b0f093b2d88c576fd", "jnlp-shared-cloud"]
+    command: ["906aba6cde236a74f96ac790ad7d4171115a8a4a20d5ef901fb9a91afd9ca464", "shared-cloud"]
+    volumes_from:
+      - ssh-slave
+
+  #https://hub.docker.com/r/verb/socat/
+  #clever way to expose host docker engine to internal services
+  docker-service:
+    container_name: docker-service
+    image: verb/socat:alpine
+    command: tcp-listen:2375,reuseaddr,fork unix:/docker.sock
+    expose:
+      - "2375"
+    volumes:
+      - /var/run/docker.sock:/docker.sock

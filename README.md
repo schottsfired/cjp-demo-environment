@@ -4,21 +4,22 @@
 
 Nginx reverse proxy at http://cjp.local
 
-CloudBees Jenkins Operations Center (CJOC) v16.06 at http://cjp.local/cjoc
+CloudBees Jenkins Operations Center (CJOC) 2.7.19.1 at http://cjp.local/cjoc
 
-CloudBees Jenkins Enterprise (CJE) v16.06 "test" at http://cjp.local/cje-test
+CloudBees Jenkins Enterprise (CJE) 2.7.19.1 "test" at http://cjp.local/cje-test
 
-CloudBees Jenkins Enterprise (CJE) v16.06 "prod" at http://cjp.local/cje-prod
+CloudBees Jenkins Enterprise (CJE) 2.7.19.1 "prod" at http://cjp.local/cje-prod
 
-Shared SSH Agent
+Shared SSH Agent with Docker on Docker
 
-Shared JNLP Cloud with Java Build Tools (OpenJDK 8, Firefox, Selenium, etc.)
+Shared JNLP Cloud with Java Build Tools (OpenJDK 8, Firefox, Selenium, etc.) and Docker on Docker
 
 ## Prerequisites
 
 built on [Docker for Mac Beta](https://blog.docker.com/2016/03/docker-for-mac-windows-beta/)
+Docker on Docker support may not work for other configurations.
 
-increase limits in Docker preferences (CPU: 3, Memory: 6GB)
+increase CPU/Memory limits in Docker preferences to as much as you can spare
 
 open terminal and type:
 
@@ -27,6 +28,8 @@ open terminal and type:
 add this entry:
 
     127.0.0.1 cjp.local
+
+modify 'docker-compose.yml' 'volumes' under 'ssh-slave' to point to your host maven cache
 
 ## How to run
 
@@ -72,16 +75,6 @@ add a client master item (cje-prod) with URL http://cjp.local/cje-prod
 
 add a client master item (cje-test) with URL  http://cjp.local/cje-test
 
-### Connect JNLP Shared Agent
-
-add a shared cloud named e.g. 'jnlp-shared-cloud' at the root of cjoc
-
-update your `` docker-compose.yml `` shared-cloud 'command:' with the on-screen instructions
-
-start the jnlp shared agent:
-
-    docker-compose start shared-agent-jnlp
-
 ### Connect SSH Shared Agent
 
 exec into the CJOC container and generate a key pair:
@@ -104,14 +97,22 @@ In CJOC, click "Credentials" and add your SSH private key
 
 In `` docker-compose.yml `` add your public key to the 'command:' and restart the container:
 
-    docker-compose restart shared-agent-ssh
+    docker-compose restart ssh-slave
 
-Create a Shared SSH Agent in CJOC with your new credentials, host: `` shared-agent-ssh ``, and a Remote FS root of `` /home/jenkins ``
+Create a Shared SSH Agent in CJOC with your new credentials, host: `` ssh-slave ``, and a Remote FS root of `` /home/jenkins ``
 
-## TODO (in branches)
+### Connect JNLP Shared Agent
 
-use new Docker preferences pane item to move away from cjp.local
+add a shared cloud named e.g. 'shared-cloud' at the root of cjoc
 
-bootstrap a seed job that loads "golden" jobs from any GH repo
+update your `` post-boot.yml `` shared-cloud 'command:' with the on-screen instructions
 
-get JNLP/SSH shared agent 'command:' out of docker-compose
+start the jnlp slave (and watch it add itself to the shared-cloud):
+
+    docker-compose start jnlp-slave
+
+### Docker on Docker
+
+Supported by SSH and JNLP slaves/agents, as well as on-master executors in cje-test
+
+When using 'docker.build' or 'docker.image.inside' on these executors, containers will spawn from the host docker engine.
