@@ -22,7 +22,7 @@ Built on [Docker for Mac Beta](https://blog.docker.com/2016/03/docker-for-mac-wi
 
         127.0.0.1 cjp.local
 
-3. Modify 'docker-compose.yml' 'volumes' under 'ssh-slave' to point to the maven cache on your host.
+3. In ``docker-compose.yml``, under ``ssh-slave``, update ``volumes:`` to point to the maven cache (and/or other caches) on your host.
 
 ## How to run
 
