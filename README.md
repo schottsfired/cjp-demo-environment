@@ -1,118 +1,118 @@
 # Docker Compose (v2) Demo Environment for CloudBees Jenkins Platform (CJP)
 
 ## Included Services
-
-Nginx reverse proxy at http://cjp.local
-
-CloudBees Jenkins Operations Center (CJOC) 2.7.19.1 at http://cjp.local/cjoc
-
-CloudBees Jenkins Enterprise (CJE) 2.7.19.1 "test" at http://cjp.local/cje-test
-
-CloudBees Jenkins Enterprise (CJE) 2.7.19.1 "prod" at http://cjp.local/cje-prod
-
-Shared SSH Agent with Docker on Docker
-
-Shared JNLP Cloud with Java Build Tools (OpenJDK 8, Firefox, Selenium, etc.) and Docker on Docker
+* Nginx reverse proxy at http://cjp.local
+* CloudBees Jenkins Operations Center (CJOC) 2.7.19.1 at http://cjp.local/cjoc
+* CloudBees Jenkins Enterprise (CJE) 2.7.19.1 "test" at http://cjp.local/cje-test
+* CloudBees Jenkins Enterprise (CJE) 2.7.19.1 "prod" at http://cjp.local/cje-prod
+* Shared SSH Agent with Docker on Docker
+* Shared JNLP Cloud with Java Build Tools (OpenJDK 8, Firefox, Selenium, etc.) and Docker on Docker
 
 ## Prerequisites
 
-built on [Docker for Mac Beta](https://blog.docker.com/2016/03/docker-for-mac-windows-beta/)
-Docker on Docker support may not work for other configurations.
+Built on [Docker for Mac Beta](https://blog.docker.com/2016/03/docker-for-mac-windows-beta/). Docker on Docker support may not work on other platforms.
 
-increase CPU/Memory limits in Docker preferences to as much as you can spare
+1. Increase CPU/Memory limits in Docker preferences to as much as you can spare (e.g. CPU: 4, Memory: 6GB).
 
-open terminal and type:
+2. Open terminal and type:
 
-    sudo vi /etc/hosts
+        sudo vi /etc/hosts
 
-add this entry:
+    then add this entry:
 
-    127.0.0.1 cjp.local
+        127.0.0.1 cjp.local
 
-modify 'docker-compose.yml' 'volumes' under 'ssh-slave' to point to your host maven cache
+3. Modify 'docker-compose.yml' 'volumes' under 'ssh-slave' to point to the maven cache on your host.
 
 ## How to run
 
-simply:
+Simply,
 
     docker-compose up
 
-and wait a little while :)
+from the project directory, and wait a little while :)
+
+Important directories like nginx logs, jenkins_home(s), etc. are volume mapped to the working project directory
 
 ## Pro tips
 
-you can restart services with e.g.:
+You can restart services with e.g.:
 
     docker-compose restart cje-test
 
-see `` docker-compose.yml `` for list of available services
+See `` docker-compose.yml `` for list of available services
 
-use ctrl+c to stop the environment, or better, use:
+Use ctrl+c to stop the environment, or better, use:
 
     docker-compose down
 
-open an interactive terminal on a container (service) with:
+Open an interactive terminal on a container (service) with:
 
     docker exec -it <serviceName> bash
 
-or run a command on a container immediately, e.g. to ping another container:
+Or run a command on a container immediately, e.g. to ping another container:
 
     docker exec -it <serviceName> ping cjp.proxy
 
-lastly, important directories like nginx logs, jenkins_home(s), etc. are volume mapped to the working project directory
-
-## Post-startup tasks
+## Post-Startup Tasks
 
 ### Connect Client Masters
 
-go to http://cjp.local/cjoc
+1. Go to http://cjp.local/cjoc
 
-activate it
+2. Activate
 
-manage jenkins > configure system and set Jenkins URL to http://cjp.local/cjoc (or just _save_ the config if it's already correct)
+3. Click Manage Jenkins > Configure System and set the Jenkins URL to http://cjp.local/cjoc (or just _save_ the config if it's already correct)
 
-add a client master item (cje-prod) with URL http://cjp.local/cje-prod
+4. Add a client master item (cje-prod) with URL http://cjp.local/cje-prod
 
-add a client master item (cje-test) with URL  http://cjp.local/cje-test
+5. Add a client master item (cje-test) with URL  http://cjp.local/cje-test
 
 ### Connect SSH Shared Agent
 
-exec into the CJOC container and generate a key pair:
+1. `` exec `` into the CJOC container and generate a key pair:
 
-    docker exec -it cjoc bash
+        docker exec -it cjoc bash
 
-    ssh-keygen
+        ssh-keygen
 
-Stick with the defaults and choose a password (or leave blank)
+2. Stick with the defaults and choose a password (or leave blank)
 
-Then copy your public and private keys to a text editor:
+3. Then copy your public and private keys to a text editor:
 
-    cd /var/jenkins_home/.ssh
+        cd /var/jenkins_home/.ssh
 
-    cat id_rsa
+        cat id_rsa
 
-    cat id_rsa.pub
+        cat id_rsa.pub
 
-In CJOC, click "Credentials" and add your SSH private key
+4. In CJOC, click "Credentials" and add your SSH private key
 
-In `` docker-compose.yml `` add your public key to the 'command:' and restart the container:
+5. In `` docker-compose.yml ``, add your public key to the `` command: `` and restart the container:
 
-    docker-compose restart ssh-slave
+        docker-compose restart ssh-slave
 
-Create a Shared SSH Agent in CJOC with your new credentials, host: `` ssh-slave ``, and a Remote FS root of `` /home/jenkins ``
+6. Create a Shared Slave item in CJOC (named e.g. `` shared-ssh-agent ``), using the credentials above, host: `` ssh-slave ``, and a Remote FS root of `` /home/jenkins ``
 
 ### Connect JNLP Shared Agent
 
-add a shared cloud named e.g. 'shared-cloud' at the root of cjoc
+1. Add a Shared Cloud item in CJOC (named e.g. `` shared-cloud ``)
 
-update your `` post-boot.yml `` shared-cloud 'command:' with the on-screen instructions
+2. In your `` docker-compose.yml `` file, under the `` jnlp-slave `` service, update `` command: ``  with the on-screen instructions
 
-start the jnlp slave (and watch it add itself to the shared-cloud):
+3. Start the jnlp slave (and watch it add itself to the shared-cloud):
 
-    docker-compose start jnlp-slave
+        docker-compose restart jnlp-slave
+
+*Note: The JNLP slave bombs on initial startup because the CJOC shared-cloud is not yet available. Thus, you must add it to the pool yourself (with a restart) after initializing the rest of the environment.*
 
 ### Docker on Docker
 
-Supported by SSH and JNLP slaves/agents, as well as on-master executors in cje-test
+Supported by the following services:
 
-When using 'docker.build' or 'docker.image.inside' on these executors, containers will spawn from the host docker engine.
+* `` cje-test ``
+* `` ssh-slave ``
+* `` jnlp-slave ``
+* `` docker-service `` (over tcp)
+
+When executing a `` docker `` command on these services, containers will spawn from the host docker engine (view with `` docker ps ``). This magic is provided by Docker socket volume mapping, see `` -v /var/run/docker.sock:/var/run/docker.sock ``.
