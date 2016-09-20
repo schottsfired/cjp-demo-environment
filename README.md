@@ -107,12 +107,12 @@ When executing a ``docker`` command on these services, containers will spawn fro
 
 * Use ⌃+c to stop the environment, or better, use:
 
-      docker-compose down
+        docker-compose down
 
 * Open an interactive terminal on a container (service) with:
 
-      docker exec -it <serviceName> bash
+        docker exec -it <serviceName> bash
 
 * Or run a command on a container immediately, e.g. to ping another container:
 
-      docker exec -it <serviceName> ping cjp.proxy
+        docker exec -it <serviceName> ping cjp.proxy
