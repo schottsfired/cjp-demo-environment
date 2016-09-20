@@ -1,6 +1,6 @@
 # Docker Compose (v2) Demo Environment for CloudBees Jenkins Platform (CJP)
 
-## Included Services
+# Included Services
 * Nginx reverse proxy at http://cjp.local
 * CloudBees Jenkins Operations Center (CJOC) 2.7.19.1 at http://cjp.local/cjoc
 * CloudBees Jenkins Enterprise (CJE) 2.7.19.1 "test" at http://cjp.local/cje-test
@@ -8,7 +8,7 @@
 * Shared SSH Agent with Docker on Docker
 * Shared JNLP Cloud with Java Build Tools (OpenJDK 8, Firefox, Selenium, etc.) and Docker on Docker
 
-## Prerequisites
+# Prerequisites
 
 Built on [Docker for Mac Beta](https://blog.docker.com/2016/03/docker-for-mac-windows-beta/). Docker on Docker support may not work on other platforms.
 
@@ -24,39 +24,19 @@ Built on [Docker for Mac Beta](https://blog.docker.com/2016/03/docker-for-mac-wi
 
 3. In ``docker-compose.yml``, under ``ssh-slave``, update ``volumes:`` to point to the maven cache (and/or other caches) on your host.
 
-## How to run
+# How to run
 
 Simply,
 
     docker-compose up
 
-from the project directory, and wait a little while :)
+..from the project directory, and wait a little while :)
 
-Important directories like nginx logs, jenkins_home(s), etc. are volume mapped to the working project directory
+Important directories like Nginx logs, Jenkins home directories, etc. are volume mapped (persisted) to the working project directory.
 
-## Pro tips
+# Post-Startup Tasks
 
-You can restart services with e.g.:
-
-    docker-compose restart cje-test
-
-See `` docker-compose.yml `` for list of available services
-
-Use ctrl+c to stop the environment, or better, use:
-
-    docker-compose down
-
-Open an interactive terminal on a container (service) with:
-
-    docker exec -it <serviceName> bash
-
-Or run a command on a container immediately, e.g. to ping another container:
-
-    docker exec -it <serviceName> ping cjp.proxy
-
-## Post-Startup Tasks
-
-### Connect Client Masters
+## Connect Client Masters
 
 1. Go to http://cjp.local/cjoc
 
@@ -68,7 +48,7 @@ Or run a command on a container immediately, e.g. to ping another container:
 
 5. Add a client master item (cje-test) with URL  http://cjp.local/cje-test
 
-### Connect SSH Shared Agent
+## Connect SSH Shared Agent
 
 1. `` exec `` into the CJOC container and generate a key pair:
 
@@ -94,7 +74,7 @@ Or run a command on a container immediately, e.g. to ping another container:
 
 6. Create a Shared Slave item in CJOC (named e.g. ``shared-ssh-agent``), using the credentials above, host: ``ssh-slave``, and a Remote FS root of ``/home/jenkins``. Give it some labels, like ``shared``, ``ssh``, ``docker``, ``docker-cloud``
 
-### Connect JNLP Shared Agent
+## Connect JNLP Shared Agent
 
 1. Add a Shared Cloud item in CJOC (named e.g. `` shared-cloud ``)
 
@@ -104,7 +84,7 @@ Or run a command on a container immediately, e.g. to ping another container:
 
         docker-compose restart jnlp-slave
 
-*Note: The JNLP agent bombs on initial startup because the CJOC shared-cloud is not yet available. Thus, you must add it to the pool yourself (with a restart) after initializing the rest of the environment.*
+*Note: The JNLP agent bombs on initial startup because the CJOC shared-cloud is not yet available - JNLP agents connect to the master, not the other way around. Thus, you must add it to the pool yourself (with a restart) after initializing the rest of the environment.*
 
 ### Docker on Docker
 
@@ -116,3 +96,23 @@ Supported by the following services:
 * ``docker-service`` (over tcp)
 
 When executing a ``docker`` command on these services, containers will spawn from the host docker engine (view with ``docker ps``). This magic is provided by Docker socket volume mapping, see ``-v /var/run/docker.sock:/var/run/docker.sock`` in ``docker-compose.yml``.
+
+## Pro tips
+
+* You can restart services with e.g.:
+
+        docker-compose restart cje-test
+
+    See `` docker-compose.yml `` for list of available services
+
+* Use ⌃+c to stop the environment, or better, use:
+
+      docker-compose down
+
+* Open an interactive terminal on a container (service) with:
+
+      docker exec -it <serviceName> bash
+
+* Or run a command on a container immediately, e.g. to ping another container:
+
+      docker exec -it <serviceName> ping cjp.proxy
