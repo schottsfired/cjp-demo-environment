@@ -113,6 +113,6 @@ When executing a ``docker`` command on these services, containers will spawn fro
 
         docker exec -it <serviceName> bash
 
-* Or run a command on a container immediately, e.g. to ping another container:
+* Or run a command on a container immediately, e.g. to ping another container (thanks to Docker 1.12 :)
 
         docker exec -it <serviceName> ping cjp.proxy
