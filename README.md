@@ -105,7 +105,7 @@ When executing a ``docker`` command on these services, containers will spawn fro
 
     See `` docker-compose.yml `` for list of available services
 
-* Use ⌃+c to stop the environment, or better, use:
+* Use ``⌃ + C`` to stop the environment, or better, use:
 
         docker-compose down
 
