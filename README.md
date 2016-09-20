@@ -88,31 +88,31 @@ Or run a command on a container immediately, e.g. to ping another container:
 
 4. In CJOC, click "Credentials" and add your SSH private key
 
-5. In `` docker-compose.yml ``, add your public key to the `` command: `` and restart the container:
+5. In ``docker-compose.yml``, add your public key to the ``command:`` and restart the container:
 
         docker-compose restart ssh-slave
 
-6. Create a Shared Slave item in CJOC (named e.g. `` shared-ssh-agent ``), using the credentials above, host: `` ssh-slave ``, and a Remote FS root of `` /home/jenkins ``
+6. Create a Shared Slave item in CJOC (named e.g. ``shared-ssh-agent``), using the credentials above, host: ``ssh-slave``, and a Remote FS root of ``/home/jenkins``. Give it some labels, like ``shared``, ``ssh``, ``docker``, ``docker-cloud``
 
 ### Connect JNLP Shared Agent
 
 1. Add a Shared Cloud item in CJOC (named e.g. `` shared-cloud ``)
 
-2. In your `` docker-compose.yml `` file, under the `` jnlp-slave `` service, update `` command: ``  with the on-screen instructions
+2. In your `` docker-compose.yml `` file, under the `` jnlp-slave `` service, update `` command: ``  with the on-screen instructions. Give it some labels, like ``shared``, ``jnlp``, ``java-build-tools``, ``docker``, ``docker-cloud``
 
-3. Start the jnlp slave (and watch it add itself to the shared-cloud):
+3. Start the JNLP agent (and watch it add itself to the shared-cloud):
 
         docker-compose restart jnlp-slave
 
-*Note: The JNLP slave bombs on initial startup because the CJOC shared-cloud is not yet available. Thus, you must add it to the pool yourself (with a restart) after initializing the rest of the environment.*
+*Note: The JNLP agent bombs on initial startup because the CJOC shared-cloud is not yet available. Thus, you must add it to the pool yourself (with a restart) after initializing the rest of the environment.*
 
 ### Docker on Docker
 
 Supported by the following services:
 
-* `` cje-test ``
-* `` ssh-slave ``
-* `` jnlp-slave ``
-* `` docker-service `` (over tcp)
+* ``cje-test``
+* ``ssh-slave``
+* ``jnlp-slave``
+* ``docker-service`` (over tcp)
 
-When executing a `` docker `` command on these services, containers will spawn from the host docker engine (view with `` docker ps ``). This magic is provided by Docker socket volume mapping, see `` -v /var/run/docker.sock:/var/run/docker.sock ``.
+When executing a ``docker`` command on these services, containers will spawn from the host docker engine (view with ``docker ps``). This magic is provided by Docker socket volume mapping, see ``-v /var/run/docker.sock:/var/run/docker.sock`` in ``docker-compose.yml``.
