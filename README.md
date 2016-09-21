@@ -93,7 +93,7 @@ Supported by the following services:
 * ``cje-test``
 * ``ssh-slave``
 * ``jnlp-slave``
-* ``docker-service`` (over tcp)
+* ``docker-service`` (over tcp://docker-service:2375)
 
 When executing a ``docker`` command on these services, containers will spawn from the host docker engine (view with ``docker ps``). This magic is provided by Docker socket volume mapping, see ``-v /var/run/docker.sock:/var/run/docker.sock`` in ``docker-compose.yml``.
 
