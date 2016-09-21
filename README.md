@@ -44,9 +44,9 @@ Important directories like Nginx logs, Jenkins home directories, etc. are volume
 
 3. Click Manage Jenkins > Configure System and set the Jenkins URL to http://cjp.local/cjoc (or just _save_ the config if it's already correct)
 
-4. Add a client master item (cje-prod) with URL http://cjp.local/cje-prod
+4. Add a Client Master item named e.g. ``cje-prod`` with URL http://cjp.local/cje-prod
 
-5. Add a client master item (cje-test) with URL  http://cjp.local/cje-test
+5. Add a Client Master item named e.g. ``cje-test`` with URL  http://cjp.local/cje-test
 
 ## Connect SSH Shared Agent
 
@@ -76,9 +76,9 @@ Important directories like Nginx logs, Jenkins home directories, etc. are volume
 
 ## Connect JNLP Shared Agent
 
-1. Add a Shared Cloud item in CJOC (named e.g. `` shared-cloud ``)
+1. Add a Shared Cloud item in CJOC (named e.g. `` shared-cloud ``). Give it some labels, like ``shared``, ``jnlp``, ``java-build-tools``, ``docker``, ``docker-cloud``
 
-2. In your `` docker-compose.yml `` file, under the `` jnlp-slave `` service, update `` command: ``  with the on-screen instructions. Give it some labels, like ``shared``, ``jnlp``, ``java-build-tools``, ``docker``, ``docker-cloud``
+2. In your `` docker-compose.yml `` file, under the `` jnlp-slave `` service, update `` command: ``  with the on-screen instructions.
 
 3. Start the JNLP agent (and watch it add itself to the shared-cloud):
 
