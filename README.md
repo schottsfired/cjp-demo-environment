@@ -1,4 +1,4 @@
-# Docker Compose (v2) Demo Environment for CloudBees Jenkins Platform (CJP)
+# Docker Compose Demo Environment for CloudBees Jenkins Platform
 
 # Included Services
 * Nginx reverse proxy at http://cjp.local
