@@ -76,7 +76,7 @@ Important directories like Nginx logs, Jenkins home directories, etc. are volume
 
 ## Connect JNLP Shared Agent
 
-1. Add a Shared Cloud item in CJOC (named e.g. `` shared-cloud ``). Give it some labels, like ``shared``, ``jnlp``, ``java-build-tools``, ``docker``, ``docker-cloud``
+1. Add a Shared Cloud item in CJOC (named e.g. `` shared-cloud ``). Remote FS root is ``/home/jenkins``. Give it some labels, like ``shared``, ``jnlp``, ``java-build-tools``, ``docker``, ``docker-cloud``
 
 2. In your `` docker-compose.yml `` file, under the `` jnlp-slave `` service, update `` command: ``  with the on-screen instructions.
 
