@@ -62,13 +62,11 @@ Important directories like Nginx logs, Jenkins home directories, etc. are volume
 
         cd /var/jenkins_home/.ssh
 
-        cat id_rsa
-
         cat id_rsa.pub
 
-4. In CJOC, click "Credentials" and add your SSH private key
+4. In CJOC, click "Credentials", select ``SSH Username with private key``. Enter ``jenkins`` as the username and select ``From the Jenkins master ~/.ssh`` for the Private key option.
 
-5. In ``docker-compose.yml``, add your public key to the ``command:`` and restart the container:
+5. In ``docker-compose.yml``, , under the ``ssh-slave `` service, replace the public key in the ``command:`` section with the one that was just generated and restart the container:
 
         docker-compose restart ssh-slave
 
@@ -76,9 +74,9 @@ Important directories like Nginx logs, Jenkins home directories, etc. are volume
 
 ## Connect JNLP Shared Agent
 
-1. Add a Shared Cloud item in CJOC (named e.g. `` shared-cloud ``). Remote FS root is ``/home/jenkins``. Give it some labels, like ``shared``, ``jnlp``, ``java-build-tools``, ``docker``, ``docker-cloud``
+1. Add a Shared Cloud item in CJOC (named e.g. `` shared-cloud ``). Remote FS root is ``/home/jenkins``. Give it some labels, like ``shared``, ``jnlp``, ``java-build-tools``, ``docker``, ``docker-cloud`` and click Save. You should now be taken to a screen that displays the slave command to run.
 
-2. In your `` docker-compose.yml `` file, under the `` jnlp-slave `` service, update `` command: ``  with the on-screen instructions.
+2. In your `` docker-compose.yml `` file, under the `` jnlp-slave `` service, update `` command: ``  with the secret that is displayed in the slave command.
 
 3. Start the JNLP agent (and watch it add itself to the shared-cloud):
 
