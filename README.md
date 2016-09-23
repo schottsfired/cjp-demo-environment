@@ -22,7 +22,7 @@ Built on [Docker for Mac Beta](https://blog.docker.com/2016/03/docker-for-mac-wi
 
         127.0.0.1 cjp.local
 
-3. In ``docker-compose.yml``, under ``ssh-slave``, update ``volumes:`` to point to the maven cache (and/or other caches) on your host.
+3. Create a file called ``.env`` in the project directory (alongside ``docker-compose.yml``) and copy everything into it from the provided ``.env.sample``. Update the ``MAVEN_CACHE`` so that it's specific to your environment. If you don't have a Maven cache, or want to use additional/other caches, then update the ``ssh-slave:`` ``volumes:`` in ``docker-compose.yml`` accordingly. For now this is the only change needed in ``.env``.
 
 # How to run
 
@@ -56,7 +56,7 @@ Important directories like Nginx logs, Jenkins home directories, etc. are volume
 
         ssh-keygen
 
-2. Stick with the defaults and choose a password (or leave blank)
+2. Stick with the defaults and choose a password (or leave blank).
 
 3. Then copy your public and private keys to a text editor:
 
@@ -66,17 +66,17 @@ Important directories like Nginx logs, Jenkins home directories, etc. are volume
 
 4. In CJOC, click "Credentials", select ``SSH Username with private key``. Enter ``jenkins`` as the username and select ``From the Jenkins master ~/.ssh`` for the Private key option.
 
-5. In ``docker-compose.yml``, , under the ``ssh-slave `` service, replace the public key in the ``command:`` section with the one that was just generated and restart the container:
+5. In ``.env``, replace ``SSH_SLAVE_COMMAND`` with the one that was just generated, save, and restart the container:
 
         docker-compose restart ssh-slave
 
-6. Create a Shared Slave item in CJOC (named e.g. ``shared-ssh-agent``), using the credentials above, host: ``ssh-slave``, and a Remote FS root of ``/home/jenkins``. Give it some labels, like ``shared``, ``ssh``, ``docker``, ``docker-cloud``
+6. Create a Shared Slave item in CJOC (named e.g. ``shared-ssh-agent``), using the credentials above, host: ``ssh-slave``, and a Remote FS root of ``/home/jenkins``. Give it some labels, like ``shared``, ``ssh``, ``docker``, ``docker-cloud``.
 
 ## Connect JNLP Shared Agent
 
 1. Add a Shared Cloud item in CJOC (named e.g. `` shared-cloud ``). Remote FS root is ``/home/jenkins``. Give it some labels, like ``shared``, ``jnlp``, ``java-build-tools``, ``docker``, ``docker-cloud`` and click Save. You should now be taken to a screen that displays the slave command to run.
 
-2. In your `` docker-compose.yml `` file, under the `` jnlp-slave `` service, update `` command: ``  with the secret that is displayed in the slave command.
+2. In ``.env``, replace ``JNLP_SLAVE_COMMAND`` with the ``-secret`` you see in the Jenkins UI, then save.
 
 3. Start the JNLP agent (and watch it add itself to the shared-cloud):
 
