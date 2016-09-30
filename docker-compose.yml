@@ -8,6 +8,8 @@ services:
     ports:
       - "80:80"
       #- "443:443"
+    networks:
+      - front
     volumes:
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
       - ./nginx/logs:/var/log/nginx
@@ -20,6 +22,9 @@ services:
   cjoc:
     container_name: cjoc
     image: cloudbees/jenkins-operations-center:2.7.19.1
+    networks:
+      - front
+      - back
     environment:
       #TODO set Jenkins URL automatically
       JENKINS_SLAVE_AGENT_PORT: "50000"
@@ -34,6 +39,9 @@ services:
   cje-prod:
     container_name: cje-prod
     image: cloudbees/jenkins-enterprise:2.7.19.1
+    networks:
+      - front
+      - back
     environment:
       JENKINS_SLAVE_AGENT_PORT: "50001"
       JENKINS_HA: "false"
@@ -50,6 +58,9 @@ services:
     build:
       context: ./docker/
       dockerfile: Dockerfile.cje-test
+    networks:
+      - front
+      - back
     environment:
       JENKINS_SLAVE_AGENT_PORT: "50002"
       JENKINS_HA: "false"
@@ -66,6 +77,8 @@ services:
     build:
       context: ./docker/
       dockerfile: Dockerfile.ssh-slave
+    networks:
+      - back
     #command is specific to your env.. see README
     command: ["${SSH_SLAVE_COMMAND}"]
     volumes:
@@ -80,6 +93,8 @@ services:
     build:
       context: ./docker/
       dockerfile: Dockerfile.jnlp-slave
+    networks:
+      - front
     environment:
       JENKINS_URL: "http://cjp.local/cjoc"
     #command is specific to your env.. see README
@@ -92,8 +107,16 @@ services:
   docker-service:
     container_name: docker-service
     image: verb/socat:alpine
+    networks:
+      - back
     command: tcp-listen:2375,reuseaddr,fork unix:/docker.sock
     expose:
       - "2375"
     volumes:
       - /var/run/docker.sock:/docker.sock
+
+networks:
+  front:
+    driver: bridge
+  back:
+    driver: bridge
