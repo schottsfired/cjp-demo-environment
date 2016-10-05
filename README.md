@@ -8,9 +8,13 @@
 * Shared SSH Agent with Docker on Docker
 * Shared JNLP Cloud with Java Build Tools (OpenJDK 8, Firefox, Selenium, etc.) and Docker on Docker
 
+*NOTE: All services are intended to run on the same host in this example.*
+
 # Prerequisites
 
-Built on [Docker for Mac Beta](https://blog.docker.com/2016/03/docker-for-mac-windows-beta/). Docker on Docker support may not work on other platforms.
+Built on [Docker for Mac Beta](https://blog.docker.com/2016/03/docker-for-mac-windows-beta/). 
+
+*NOTE: Docker on Docker support may not work on other platforms.*
 
 1. Increase CPU/Memory limits in Docker preferences to as much as you can spare (e.g. CPU: 4, Memory: 6GB).
 
