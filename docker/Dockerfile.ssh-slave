@@ -12,5 +12,3 @@ RUN curl -L -o /tmp/docker-latest.tgz https://get.docker.com/builds/Linux/x86_64
   && groupadd staff \
   && adduser jenkins docker \
   && adduser root docker
-
-USER jenkins
