@@ -22,7 +22,7 @@ Built on [Docker for Mac Beta](https://blog.docker.com/2016/03/docker-for-mac-wi
 
         sudo vi /etc/hosts
 
-    then add this entry:
+    then add this entry: (you may append if this ip already exists)
 
         127.0.0.1 cjp.local
 
@@ -48,9 +48,9 @@ Important directories like Nginx logs, Jenkins home directories, etc. are volume
 
 3. Click Manage Jenkins > Configure System and set the Jenkins URL to http://cjp.local/cjoc (or just _save_ the config if it's already correct)
 
-4. Add a Client Master item named e.g. ``cje-prod`` with URL http://cjp.local/cje-prod
+4. Add a Client Master item named e.g. ``cje-prod`` with URL http://cjp.local/cje-prod, Activate the cje-prod.
 
-5. Add a Client Master item named e.g. ``cje-test`` with URL  http://cjp.local/cje-test
+5. Add a Client Master item named e.g. ``cje-test`` with URL  http://cjp.local/cje-test, Activate the cje-test.
 
 ## Connect SSH Shared Agent
 
@@ -62,15 +62,15 @@ Important directories like Nginx logs, Jenkins home directories, etc. are volume
 
 2. Stick with the defaults and choose a password (or leave blank).
 
-3. Then copy your public and private keys to a text editor:
+3. Then copy your public key to a text editor:
 
         cd /var/jenkins_home/.ssh
 
         cat id_rsa.pub
 
-4. In CJOC, click "Credentials", select ``SSH Username with private key``. Enter ``jenkins`` as the username and select ``From the Jenkins master ~/.ssh`` for the Private key option.
+4. In CJOC, click "Credentials", "System", "Global credentials (unrestricted)", "Add Credentials", select ``SSH Username with private key``. Enter ``jenkins`` as the username and select ``From the Jenkins master ~/.ssh`` for the Private key option.
 
-5. In ``.env``, replace ``SSH_SLAVE_COMMAND`` with the one that was just generated, save, and restart the container:
+5. In ``.env``, replace ``SSH_SLAVE_COMMAND`` with the public key that was just generated, save, and restart the container:
 
         docker-compose restart ssh-slave
 
