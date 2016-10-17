@@ -48,9 +48,9 @@ Important directories like Nginx logs, Jenkins home directories, etc. are volume
 
 3. Click Manage Jenkins > Configure System and set the Jenkins URL to http://cjp.local/cjoc (or just _save_ the config if it's already correct)
 
-4. Add a Client Master item named e.g. ``cje-prod`` with URL http://cjp.local/cje-prod, Activate the cje-prod.
+4. Add a Client Master item named e.g. ``cje-prod`` with URL http://cjp.local/cje-prod.
 
-5. Add a Client Master item named e.g. ``cje-test`` with URL  http://cjp.local/cje-test, Activate the cje-test.
+5. Add a Client Master item named e.g. ``cje-test`` with URL  http://cjp.local/cje-test.
 
 ## Connect SSH Shared Agent
 
