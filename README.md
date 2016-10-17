@@ -12,7 +12,7 @@
 
 # Prerequisites
 
-Built on [Docker for Mac Beta](https://blog.docker.com/2016/03/docker-for-mac-windows-beta/). 
+Built on [Docker for Mac Beta](https://blog.docker.com/2016/03/docker-for-mac-windows-beta/).
 
 *NOTE: Docker on Docker support may not work on other platforms.*
 
@@ -101,15 +101,19 @@ When executing a ``docker`` command on these services, containers will spawn fro
 
 ## Pro tips
 
+* Use ``⌃ + C`` to stop the environment, or better, use:
+
+        docker-compose down
+
+* Clean your environment (free disk space, fix "strange" issues) with:
+
+        ./docker-clean.sh
+
 * You can restart services with e.g.:
 
         docker-compose restart cje-test
 
     See `` docker-compose.yml `` for list of available services
-
-* Use ``⌃ + C`` to stop the environment, or better, use:
-
-        docker-compose down
 
 * Open an interactive terminal on a container (service) with:
 
