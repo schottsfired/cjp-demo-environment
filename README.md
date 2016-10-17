@@ -97,7 +97,7 @@ Supported by the following services:
 * ``jnlp-slave``
 * ``docker-service`` (over tcp://docker-service:2375)
 
-When executing a ``docker`` command on these services, containers will spawn from the host docker engine (view with ``docker ps``). This magic is provided by Docker socket volume mapping, see ``-v /var/run/docker.sock:/var/run/docker.sock`` in ``docker-compose.yml``.
+When executing a ``docker`` command within these containers, the Docker client uses the  docker server outside the container. This magic is provided by Docker socket volume mapping, see ``-v /var/run/docker.sock:/var/run/docker.sock`` in ``docker-compose.yml``. For more information, read [this blog post](https://jpetazzo.github.io/2015/09/03/do-not-use-docker-in-docker-for-ci/).
 
 ## Pro tips
 
