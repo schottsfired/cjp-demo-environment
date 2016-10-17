@@ -7,11 +7,11 @@ services:
     image: nginx:1.10-alpine
     ports:
       - "80:80"
-      #- "443:443"
+      # - "443:443"
     volumes:
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
       - ./nginx/logs:/var/log/nginx
-    depends_on: #to force proxy to start behind
+    depends_on: # to force proxy to start behind
       - cjoc
       - cje-test
       - cje-prod
@@ -21,10 +21,9 @@ services:
     container_name: cjoc
     image: cloudbees/jenkins-operations-center:2.7.19.1
     environment:
-      # TODO set Jenkins URL automatically
       JENKINS_SLAVE_AGENT_PORT: "50000"
       JENKINS_HA: "false"
-      JAVA_OPTS: "-Dhudson.TcpSlaveAgentListener.hostName=cjoc -Dhudson.udp=-1 -Dhudson.DNSMultiCast.disabled=true -Djava.awt.headless=true -Xmx1024m -Xms256m -Dorg.apache.commons.jelly.tags.fmt.timeZone=America/New_York"
+      JAVA_OPTS: "-Dhudson.TcpSlaveAgentListener.hostName=cjoc -Dhudson.TcpSlaveAgentListener.port=50000 -Dhudson.udp=-1 -Dhudson.DNSMultiCast.disabled=true -Djava.awt.headless=true -Xmx1024m -Xms256m -Dorg.apache.commons.jelly.tags.fmt.timeZone=America/New_York"
       # https://wiki.jenkins-ci.org/display/JENKINS/Features+controlled+by+system+properties
       JENKINS_OPTS: "--prefix=/cjoc"
     volumes:
@@ -35,9 +34,9 @@ services:
     container_name: cje-prod
     image: cloudbees/jenkins-enterprise:2.7.19.1
     environment:
-      JENKINS_SLAVE_AGENT_PORT: "50001"
+      JENKINS_SLAVE_AGENT_PORT: "50000"
       JENKINS_HA: "false"
-      JAVA_OPTS: "-Dhudson.TcpSlaveAgentListener.hostName=cje-prod -Dhudson.udp=-1 -Dhudson.DNSMultiCast.disabled=true -Djava.awt.headless=true -Xmx2048m -Xms256m -Dorg.apache.commons.jelly.tags.fmt.timeZone=America/New_York"
+      JAVA_OPTS: "-Dhudson.TcpSlaveAgentListener.hostName=cje-prod -Dhudson.TcpSlaveAgentListener.port=50000 -Dhudson.udp=-1 -Dhudson.DNSMultiCast.disabled=true -Djava.awt.headless=true -Xmx2048m -Xms256m -Dorg.apache.commons.jelly.tags.fmt.timeZone=America/New_York"
       JENKINS_OPTS: "--prefix=/cje-prod"
     volumes:
       - ./data/cje-prod:/var/jenkins_home
@@ -51,9 +50,9 @@ services:
       context: ./docker/
       dockerfile: Dockerfile.cje-test
     environment:
-      JENKINS_SLAVE_AGENT_PORT: "50002"
+      JENKINS_SLAVE_AGENT_PORT: "50000"
       JENKINS_HA: "false"
-      JAVA_OPTS: "-Dhudson.TcpSlaveAgentListener.hostName=cje-test -Dhudson.udp=-1 -Dhudson.DNSMultiCast.disabled=true -Djava.awt.headless=true -Xmx2048m -Xms256m -Dorg.apache.commons.jelly.tags.fmt.timeZone=America/New_York"
+      JAVA_OPTS: "-Dhudson.TcpSlaveAgentListener.hostName=cje-test -Dhudson.TcpSlaveAgentListener.port=50000 -Dhudson.udp=-1 -Dhudson.DNSMultiCast.disabled=true -Djava.awt.headless=true -Xmx2048m -Xms256m -Dorg.apache.commons.jelly.tags.fmt.timeZone=America/New_York"
       JENKINS_OPTS: "--prefix=/cje-test"
     volumes:
       - ./data/cje-test:/var/jenkins_home
