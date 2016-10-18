@@ -22,7 +22,7 @@ Built on [Docker for Mac Beta](https://blog.docker.com/2016/03/docker-for-mac-wi
 
         sudo vi /etc/hosts
 
-    then add this entry: (you may append if this ip already exists)
+    then add (or append) this entry:
 
         127.0.0.1 cjp.local
 
