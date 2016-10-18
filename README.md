@@ -86,7 +86,7 @@ Important directories like Nginx logs, Jenkins home directories, etc. are volume
 
         docker-compose restart jnlp-slave
 
-*Note: The JNLP agent bombs on initial startup because the CJOC shared-cloud is not yet available - JNLP agents connect to the master, not the other way around. Thus, you must add it to the pool yourself (with a restart) after initializing the rest of the environment.*
+*Note: The JNLP agent bombs on initial startup because the CJOC shared-cloud is not yet available - JNLP agents connect to the master, not the other way around. Thus, you must add it to the pool (with a restart) after CJOC is up and running.*
 
 ## Docker on Docker
 
