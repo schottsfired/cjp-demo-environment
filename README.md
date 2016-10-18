@@ -113,8 +113,6 @@ When executing a ``docker`` command within these containers, the Docker client u
 
         docker-compose restart cje-test
 
-    See `` docker-compose.yml `` for list of available services
-
 * Open an interactive terminal on a container (service) with:
 
         docker exec -it <serviceName> bash
