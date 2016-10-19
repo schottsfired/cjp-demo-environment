@@ -88,7 +88,7 @@ Important directories like JENKINS_HOME(s), Nginx logs, etc. are volume mapped (
 
 *Note: The JNLP agent bombs on initial startup because the CJOC shared-cloud is not yet available - JNLP agents connect to the master, not the other way around. Thus, you must add it to the pool (with a restart) after CJOC is up and running.*
 
-## Docker on Docker
+# Docker on Docker
 
 Supported by the following services:
 
@@ -99,7 +99,7 @@ Supported by the following services:
 
 When executing a ``docker`` command within these containers, the Docker client uses the  docker server outside the container. This magic is provided by Docker socket volume mapping, see ``-v /var/run/docker.sock:/var/run/docker.sock`` in ``docker-compose.yml``. For more information, read [this blog post](https://jpetazzo.github.io/2015/09/03/do-not-use-docker-in-docker-for-ci/).
 
-## Pro tips
+# Pro tips
 
 * Use ``⌃ + C`` to stop the environment, or better, use:
 
