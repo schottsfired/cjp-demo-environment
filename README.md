@@ -6,7 +6,7 @@
 * CloudBees Jenkins Enterprise (CJE) 2.7.20.2 "test" at http://cjp.local/cje-test
 * CloudBees Jenkins Enterprise (CJE) 2.7.20.2 "prod" at http://cjp.local/cje-prod
 * Shared SSH Agent with Docker on Docker
-* Shared JNLP Cloud with Java Build Tools (OpenJDK 8, Firefox, Selenium, etc.) and Docker on Docker
+* Shared JNLP Cloud with "Java Build Tools" (OpenJDK 8, Maven, Firefox, Selenium, etc.) and Docker on Docker
 
 *NOTE: All services are intended to run on the same host in this example.*
 
@@ -36,7 +36,7 @@ Simply,
 
 ..from the project directory, and wait a little while :)
 
-Important directories like Nginx logs, Jenkins home directories, etc. are volume mapped (persisted) to the working project directory.
+Important directories like JENKINS_HOME(s), Nginx logs, etc. are volume mapped (persisted) to the working project directory. Treat JENKINS_HOME directories with care, and consider backups.
 
 # Post-Startup Tasks
 
@@ -46,7 +46,7 @@ Important directories like Nginx logs, Jenkins home directories, etc. are volume
 
 2. Activate
 
-3. Click Manage Jenkins > Configure System and set the Jenkins URL to http://cjp.local/cjoc (or just _save_ the config if it's already correct)
+3. Click Manage Jenkins > Configure System and set the Jenkins URL to http://cjp.local/cjoc (or just _save_ if it's already correct)
 
 4. Add a Client Master item named e.g. ``cje-prod`` with URL http://cjp.local/cje-prod.
 
@@ -62,7 +62,7 @@ Important directories like Nginx logs, Jenkins home directories, etc. are volume
 
 2. Stick with the defaults and choose a password (or leave blank).
 
-3. Then copy your public key to a text editor:
+3. Copy your public key to a text editor:
 
         cd /var/jenkins_home/.ssh
 
@@ -109,14 +109,10 @@ When executing a ``docker`` command within these containers, the Docker client u
 
         ./docker-clean.sh
 
-* You can restart services with e.g.:
-
-        docker-compose restart cje-test
-
 * Open an interactive terminal on a container (service) with:
 
-        docker exec -it <serviceName> bash
+        docker exec -it <containerName/serviceName> bash
 
-* Or run a command on a container immediately, e.g. to ping another container (thanks to Docker 1.12 :)
+* Or run a command within a container immediately, e.g. to ping another container (thank you Docker 1.12 :)
 
-        docker exec -it <serviceName> ping cjp.proxy
+        docker exec -it <containerName/serviceName> ping cjp.proxy
