@@ -4,13 +4,14 @@
 
 *Fork and extend to meet your specific needs, and potentially learn more about Jenkins and Docker on your journey through the README below.*
 
-## Included Services
+## What does this include?
 * Nginx reverse proxy at http://cjp.local
-* CloudBees Jenkins Operations Center (CJOC) 2.7.20.2 at http://cjp.local/cjoc
-* CloudBees Jenkins Enterprise (CJE) 2.7.20.2 "test" at http://cjp.local/cje-test
-* CloudBees Jenkins Enterprise (CJE) 2.7.20.2 "prod" at http://cjp.local/cje-prod
-* Shared SSH Agent with Docker on Docker
-* Shared JNLP Cloud with "Java Build Tools" (OpenJDK 8, Maven, Firefox, Selenium, etc.) and Docker on Docker
+* CloudBees Jenkins Operations Center (CJOC) at http://cjp.local/cjoc
+* CloudBees Jenkins Enterprise (CJE) "prod" at http://cjp.local/cje-prod
+* CloudBees Jenkins Enterprise (CJE) "test" at http://cjp.local/cje-test
+* A *shared* SSH agent based on [jenkinsci/ssh-slave](https://hub.docker.com/r/jenkinsci/ssh-slave/)
+* A *shared* Cloud with one JNLP agent based on [cloudbees/jnlp-slave-with-java-build-tools](https://hub.docker.com/r/cloudbees/jnlp-slave-with-java-build-tools/)
+* Support for Docker on Docker on Master and Agent(s)
 
 *NOTE: All services are intended to run on the same host in this example.*
 
