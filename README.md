@@ -1,8 +1,10 @@
 # Docker Compose Demo Environment for CloudBees Jenkins Platform
 
-*A great way to run CloudBees Jenkins on your laptop with support for "Docker stuff"!*
+A great way to run CloudBees Jenkins on your laptop with support for "Docker stuff"!
 
-*Fork and extend to meet your specific needs, and potentially learn more about Jenkins and Docker on your journey through the README below.*
+Fork and extend to meet your specific needs, and potentially learn more about Jenkins and Docker on your journey through the README below.
+
+*Disclaimer: Not officially suppported by CloudBees.*
 
 ## What does this include?
 * Nginx reverse proxy at http://cjp.local
