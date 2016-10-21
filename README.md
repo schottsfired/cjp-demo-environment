@@ -6,7 +6,7 @@ Feel free to clone/fork and extend this repo to meet your specific needs, and sh
 
 My goal for this repo is to help people learn about CloudBees Jenkins and Docker on their journey through the README below.
 
-*Disclaimer: Not officially suppported by CloudBees. A very cool, pre-configured Docker trial is available [here](https://www.cloudbees.com/get-started) on the CloudBees website.*
+*DISCLAIMER: Not officially suppported by CloudBees. A very cool, pre-configured Docker trial is available [here](https://www.cloudbees.com/get-started) on the CloudBees website.*
 
 ## What does this include?
 * Nginx reverse proxy at http://cjp.local
