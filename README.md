@@ -1,5 +1,7 @@
 # Docker Compose Demo Environment for CloudBees Jenkins Platform
 
+*A great way to run CloudBees Jenkins on your laptop with full support for "Docker stuff"!*
+
 # Included Services
 * Nginx reverse proxy at http://cjp.local
 * CloudBees Jenkins Operations Center (CJOC) 2.7.20.2 at http://cjp.local/cjoc
@@ -88,18 +90,32 @@ Important directories like JENKINS_HOME(s), Nginx logs, etc. are volume mapped (
 
 *Note: The JNLP agent bombs on initial startup because the CJOC shared-cloud is not yet available - JNLP agents connect to the master, not the other way around. Thus, you must add it to the pool (with a restart) after CJOC is up and running.*
 
-# Docker on Docker
+# What Next?
 
-Supported by the following services:
+Automate all the things!
+
+## Consider the following plugins
+
+* [Mock Security Realm](https://wiki.jenkins-ci.org/display/JENKINS/Mock+Security+Realm+Plugin)
+* [CloudBees Docker Build and Publish](https://wiki.jenkins-ci.org/display/JENKINS/CloudBees+Docker+Build+and+Publish+plugin)
+* [CloudBees Docker Custom Build Environment](https://wiki.jenkins-ci.org/display/JENKINS/CloudBees+Docker+Custom+Build+Environment+Plugin)
+* [CloudBees Docker Pipeline](https://wiki.jenkins-ci.org/display/JENKINS/CloudBees+Docker+Pipeline+Plugin)
+* [Docker Slaves Plugin](https://wiki.jenkins-ci.org/display/JENKINS/Docker+Slaves+Plugin) (use in tandem with ``docker-service``)
+
+# Miscellaneous
+
+## Docker on Docker (a.k.a "Docker inception")
+
+Is supported by the following services:
 
 * ``cje-test``
 * ``ssh-slave``
 * ``jnlp-slave``
-* ``docker-service`` (over tcp://docker-service:2375)
+* ``docker-service`` (tcp://docker-service:2375)
 
-When executing a ``docker`` command within these containers, the Docker client uses the  docker server outside the container. This magic is provided by Docker socket volume mapping, see ``-v /var/run/docker.sock:/var/run/docker.sock`` in ``docker-compose.yml``. For more information, read [this blog post](https://jpetazzo.github.io/2015/09/03/do-not-use-docker-in-docker-for-ci/).
+When executing a ``docker`` command from within these containers, the Docker client installed inside the container communicates with the  docker server outside the container. This magic is provided by Docker socket volume mapping; see ``-v /var/run/docker.sock:/var/run/docker.sock`` in ``docker-compose.yml``. For more information, read [this famous blog post](https://jpetazzo.github.io/2015/09/03/do-not-use-docker-in-docker-for-ci/).
 
-# Pro tips
+## Pro tips
 
 * Use ``⌃ + C`` to stop the environment, or better, use:
 
