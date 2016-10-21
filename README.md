@@ -2,7 +2,7 @@
 
 A great way to run CloudBees Jenkins on your laptop, with support for "Docker stuff"!
 
-Feel free to clone/fork and extend this repo to meet your specific needs.
+Feel free to clone/fork and extend this repo to meet your specific needs, and shoot me a PR if I missed anything!
 
 My goal for this repo is to help people learn about CloudBees Jenkins and Docker on their journey through the README below.
 
