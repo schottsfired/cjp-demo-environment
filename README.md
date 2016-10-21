@@ -15,7 +15,7 @@ My goal for this repo is to help people learn about CloudBees Jenkins and Docker
 * CloudBees Jenkins Enterprise (CJE) "test" at http://cjp.local/cje-test
 * A *shared* SSH agent based on [jenkinsci/ssh-slave](https://hub.docker.com/r/jenkinsci/ssh-slave/)
 * A *shared* Cloud with one JNLP agent based on [cloudbees/jnlp-slave-with-java-build-tools](https://hub.docker.com/r/cloudbees/jnlp-slave-with-java-build-tools/)
-* Support for Docker on Docker on Master and Agent(s)
+* Support for Docker on Docker
 
 *NOTE: All services are intended to run on the same host in this example.*
 
