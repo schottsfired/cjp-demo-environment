@@ -21,7 +21,7 @@ My goal for this repo is to help people learn about CloudBees Jenkins and Docker
 
 ## Prerequisites
 
-Built on [Docker for Mac Beta](https://blog.docker.com/2016/03/docker-for-mac-windows-beta/).
+Go get [Docker for Mac Beta](https://blog.docker.com/2016/03/docker-for-mac-windows-beta/).
 
 *NOTE: Docker on Docker support may not work on other platforms.*
 
