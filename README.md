@@ -4,7 +4,7 @@ A great way to run CloudBees Jenkins on your laptop, with support for "Docker st
 
 Feel free to clone/fork and extend this repo to meet your specific needs, and shoot me a PR if I missed anything!
 
-My goal for this repo is to help people learn about CloudBees Jenkins and Docker on their journey through the README below.
+My goal for this repo is to help people learn about CloudBees Jenkins and Docker while journeying through the README below.
 
 *DISCLAIMER: Not officially suppported by CloudBees. A very cool, pre-configured Docker trial is available [here](https://www.cloudbees.com/get-started) on the CloudBees website.*
 
@@ -120,7 +120,7 @@ Is supported by the following services:
 * ``jnlp-slave``
 * ``docker-service`` (tcp://docker-service:2375)
 
-When executing a ``docker`` command from within these containers, the Docker client installed inside the container communicates with the  docker server outside the container. This magic is provided by Docker socket volume mapping; see ``-v /var/run/docker.sock:/var/run/docker.sock`` in ``docker-compose.yml``. For more information, read [this famous blog post](https://jpetazzo.github.io/2015/09/03/do-not-use-docker-in-docker-for-ci/).
+When executing a ``docker`` command from within these containers, the Docker client installed inside the container communicates with the  Docker server outside the container. This magic is provided by Docker socket volume mapping; see ``-v /var/run/docker.sock:/var/run/docker.sock`` in ``docker-compose.yml``. For more information, read [this famous blog post](https://jpetazzo.github.io/2015/09/03/do-not-use-docker-in-docker-for-ci/).
 
 ### Pro tips
 
