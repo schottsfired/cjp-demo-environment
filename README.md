@@ -97,6 +97,19 @@ Important directories like JENKINS_HOME(s), Nginx logs, etc. are volume mapped (
 
 *Note: The JNLP agent bombs on initial startup because the CJOC shared-cloud is not available and ready to accept clients - remember: JNLP agents connect to the master, not the other way around. Add it to the shared-cloud pool (via ``restart``) after CJOC is up and running.*
 
+### Connect Swarm Slaves
+1. Setup authentication on CJOC with access to cje-prod.
+
+2. Install the [Swarm Plugin](https://wiki.jenkins-ci.org/display/JENKINS/Swarm+Plugin) on cje-prod.
+
+2. In .env file, replace username and password with authenication details.
+
+3. In .env file, replace cje_prod_url with cje-prod URL.
+
+4. If the service is not started, start it with:
+
+        docker-compose restart swarm-slave
+
 ## What Next?
 
 Automate all the things!
