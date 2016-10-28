@@ -14,8 +14,8 @@ RUN curl -L -o /tmp/docker-latest.tgz https://get.docker.com/builds/Linux/x86_64
   && adduser jenkins docker \
   && adduser root docker
 
-USER jenkins
-
 RUN mkdir /tmp/swarmclient && cd /tmp/swarmclient/
 RUN curl -o /tmp/swarmclient/swarm-client.jar https://repo.jenkins-ci.org/releases/org/jenkins-ci/plugins/swarm-client/2.2/swarm-client-2.2-jar-with-dependencies.jar \
   && mv /tmp/swarmclient/* /usr/bin/
+
+USER JENKINS
