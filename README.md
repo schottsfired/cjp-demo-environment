@@ -2,9 +2,9 @@
 
 # Included Services
 * Nginx reverse proxy at http://cjp.local
-* CloudBees Jenkins Operations Center (CJOC) 2.7.19.1 at http://cjp.local/cjoc
-* CloudBees Jenkins Enterprise (CJE) 2.7.19.1 "test" at http://cjp.local/cje-test
-* CloudBees Jenkins Enterprise (CJE) 2.7.19.1 "prod" at http://cjp.local/cje-prod
+* CloudBees Jenkins Operations Center (CJOC) 2.7.21.1 at http://cjp.local/cjoc
+* CloudBees Jenkins Enterprise (CJE) 2.7.21.1 "test" at http://cjp.local/cje-test
+* CloudBees Jenkins Enterprise (CJE) 2.7.21.1 "prod" at http://cjp.local/cje-prod
 * Shared SSH Agent with Docker on Docker
 * Shared JNLP Cloud with Java Build Tools (OpenJDK 8, Firefox, Selenium, etc.) and Docker on Docker
 
