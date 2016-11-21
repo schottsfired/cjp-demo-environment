@@ -10,20 +10,12 @@ My goal for this repo is to help people learn about CloudBees Jenkins and Docker
 
 ## What does this include?
 * Nginx reverse proxy at http://cjp.local
-<<<<<<< HEAD
-* CloudBees Jenkins Operations Center (CJOC) 2.7.21.1 at http://cjp.local/cjoc
-* CloudBees Jenkins Enterprise (CJE) 2.7.21.1 "test" at http://cjp.local/cje-test
-* CloudBees Jenkins Enterprise (CJE) 2.7.21.1 "prod" at http://cjp.local/cje-prod
-* Shared SSH Agent with Docker on Docker
-* Shared JNLP Cloud with Java Build Tools (OpenJDK 8, Firefox, Selenium, etc.) and Docker on Docker
-=======
 * CloudBees Jenkins Operations Center (CJOC) at http://cjp.local/cjoc
 * CloudBees Jenkins Enterprise (CJE) "prod" at http://cjp.local/cje-prod
 * CloudBees Jenkins Enterprise (CJE) "test" at http://cjp.local/cje-test
 * A *shared* SSH agent based on [jenkinsci/ssh-slave](https://hub.docker.com/r/jenkinsci/ssh-slave/)
 * A *shared* Cloud with one JNLP agent based on [cloudbees/jnlp-slave-with-java-build-tools](https://hub.docker.com/r/cloudbees/jnlp-slave-with-java-build-tools/)
 * Support for Docker on Docker
->>>>>>> f6e9165fc2eaadb21d7ac26c80fa514ee096e6fd
 
 *NOTE: All services are intended to run on the same host in this example.*
 
