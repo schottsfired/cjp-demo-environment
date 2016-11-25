@@ -37,6 +37,9 @@ Go get [Docker for Mac Beta](https://blog.docker.com/2016/03/docker-for-mac-wind
 
 3. Create a file called ``.env`` in the project directory (alongside ``docker-compose.yml``) and copy everything into it from the provided ``.env.sample``. Update the ``MAVEN_CACHE`` so that it's specific to your environment. If you don't have a Maven cache, or want to use additional/other caches, then update the ``ssh-slave:`` ``volumes:`` in ``docker-compose.yml`` accordingly. For now this is the only change needed in ``.env``.
 
+$ touch .env
+$ cat .env.sample > .env
+
 ## How to run
 
 Simply,
@@ -85,9 +88,13 @@ Important directories like JENKINS_HOME(s), Nginx logs, etc. are volume mapped (
 
 6. Create a Shared Slave item in CJOC (named e.g. ``shared-ssh-agent``), using the credentials above, host: ``ssh-slave``, and a Remote FS root of ``/home/jenkins``. Give it some labels, like ``shared``, ``ssh``, ``docker``, ``docker-cloud``.
 
+NOTE - Beware!! Ocassionally, it has been noticed that labels like 'shared' or 'ssh' or 'docker' appear to be reserved words and the agent definition doesn't seem to recognize them. The label 'docker-cloud' always works.
+
 ### Connect JNLP Shared Agent
 
 1. Add a Shared Cloud item in CJOC (named e.g. `` shared-cloud ``). Remote FS root is ``/home/jenkins``. Give it some labels, like ``shared``, ``jnlp``, ``java-build-tools``, ``docker``, ``docker-cloud`` and click Save. You should now be taken to a screen that displays the slave command to run.
+
+NOTE - Beware!! Ocassionally, it has been noticed that labels like 'shared' or 'jnlp' or 'docker' appear to be reserved words and the agent definition doesn't seem to recognize them. The labels 'docker-cloud' or 'java-build-tools' always work.
 
 2. In ``.env``, replace ``JNLP_SLAVE_COMMAND`` with the ``-secret`` you see in the Jenkins UI, then save.
 
