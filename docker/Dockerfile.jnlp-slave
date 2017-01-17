@@ -1,4 +1,4 @@
-FROM cloudbees/jnlp-slave-with-java-build-tools:1.0.0
+FROM cloudbees/jnlp-slave-with-java-build-tools:latest
 
 #add Docker
 USER root

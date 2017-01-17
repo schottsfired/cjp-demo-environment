@@ -1,5 +1,10 @@
 version: "2"
 
+networks:
+  default:
+    external:
+      name: cjp-demo-environment
+
 services:
   # https://hub.docker.com/_/nginx/
   proxy:
@@ -100,17 +105,17 @@ services:
   # https://hub.docker.com/r/cloudbees/jnlp-slave-with-java-build-tools/
   # disregard initial startup error, we can start it later
   # wait for https://github.com/docker/compose/issues/1896
-  jnlp-slave:
-    container_name: jnlp-slave
-    build:
-      context: ./docker/
-      dockerfile: Dockerfile.jnlp-slave
-    environment:
-      JENKINS_URL: "http://cjp.local/cjoc"
-    #command is specific to your env.. see README
-    command: ["${JNLP_SLAVE_COMMAND}", "shared-cloud"]
-    volumes_from:
-      - ssh-slave
+  # jnlp-slave:
+  #   container_name: jnlp-slave
+  #   build:
+  #     context: ./docker/
+  #     dockerfile: Dockerfile.jnlp-slave
+  #   environment:
+  #     JENKINS_URL: "http://cjp.local/cjoc"
+  #   #command is specific to your env.. see README
+  #   command: ["${JNLP_SLAVE_COMMAND}", "shared-cloud"]
+  #   volumes_from:
+  #     - ssh-slave
 
   # https://hub.docker.com/r/verb/socat/
   # clever way to expose host docker engine to internal services

@@ -13,8 +13,8 @@ My goal for this repo is to help people learn about CloudBees Jenkins and Docker
 * CloudBees Jenkins Operations Center (CJOC) at http://cjp.local/cjoc
 * CloudBees Jenkins Enterprise (CJE) "prod" at http://cjp.local/cje-prod
 * CloudBees Jenkins Enterprise (CJE) "test" at http://cjp.local/cje-test
-* A *shared* SSH agent based on [jenkinsci/ssh-slave](https://hub.docker.com/r/jenkinsci/ssh-slave/)
-* A *shared* Cloud with one JNLP agent based on [cloudbees/jnlp-slave-with-java-build-tools](https://hub.docker.com/r/cloudbees/jnlp-slave-with-java-build-tools/)
+* An *shared* SSH agent based on [jenkinsci/ssh-slave](https://hub.docker.com/r/jenkinsci/ssh-slave/)
+* A *shared* Cloud and the ability to spawn JNLP agents based on [cloudbees/jnlp-slave-with-java-build-tools](https://hub.docker.com/r/cloudbees/jnlp-slave-with-java-build-tools/)
 * Support for Docker on Docker
 
 *NOTE: All services are intended to run on the same host in this example.*
@@ -35,17 +35,25 @@ Go get [Docker for Mac Beta](https://blog.docker.com/2016/03/docker-for-mac-wind
 
         127.0.0.1 cjp.local
 
-3. Create a file called ``.env`` in the project directory (alongside ``docker-compose.yml``) and copy everything into it from the provided ``.env.sample``. Update the ``MAVEN_CACHE`` so that it's specific to your environment. If you don't have a Maven cache, or want to use additional/other caches, then update the ``ssh-slave:`` ``volumes:`` in ``docker-compose.yml`` accordingly. For now this is the only change needed in ``.env``.
+3. Create a file called ``.env`` in the project directory (alongside ``docker-compose.yml``) and copy everything into it from the provided ``.env.sample``. Update the ``MAVEN_CACHE`` so that it's specific to your environment. If you don't have a Maven cache, or want to use additional/other caches, then update (or remove) the ``ssh-slave:`` ``volumes:`` in ``docker-compose.yml`` accordingly. For now this is the only change needed in ``.env``.
+
+4. Create a Docker network for this environment:
+
+        make network
 
 ## How to run
 
 Simply,
 
-    docker-compose up
+    docker-compose up -d
 
 ..from the project directory, and wait a little while :)
 
-Important directories like JENKINS_HOME(s), Nginx logs, etc. are volume mapped (persisted) to the working project directory. Treat JENKINS_HOME directories with care, and consider backups.
+You can view logs (and safely ctrl+c out of them) via:
+
+    docker-compose logs -t -f
+
+Important directories like JENKINS_HOME(s), Nginx logs, etc. are volume mapped (persisted) to the working project directory. Treat JENKINS_HOME directories (``<project-name>/data/...``) with care, and consider backups.
 
 ## Post-Startup Tasks
 
@@ -85,17 +93,23 @@ Important directories like JENKINS_HOME(s), Nginx logs, etc. are volume mapped (
 
 6. Create a Shared Slave item in CJOC (named e.g. ``shared-ssh-agent``), using the credentials above, host: ``ssh-slave``, and a Remote FS root of ``/home/jenkins``. Give it some labels, like ``shared``, ``ssh``, ``docker``, ``docker-cloud``.
 
-### Connect JNLP Shared Agent
+### Add JNLP Agent(s) to a Shared Cloud
 
 1. Add a Shared Cloud item in CJOC (named e.g. `` shared-cloud ``). Remote FS root is ``/home/jenkins``. Give it some labels, like ``shared``, ``jnlp``, ``java-build-tools``, ``docker``, ``docker-cloud`` and click Save. You should now be taken to a screen that displays the slave command to run.
 
-2. In ``.env``, replace ``JNLP_SLAVE_COMMAND`` with the ``-secret`` you see in the Jenkins UI, then save.
+2. In ``.env``, replace ``SHARED_CLOUD_NAME`` if needed, and replace ``JNLP_SLAVE_COMMAND`` with the ``-secret`` you find the Jenkins UI, then save your changes.
 
-3. Start the JNLP agent (and watch it add itself to the shared-cloud):
+3. Build the JNLP agent:
 
-        docker-compose restart jnlp-slave
+        make build-jnlp-slave
 
-*Note: The JNLP agent bombs on initial startup because the CJOC shared-cloud is not available and ready to accept clients - remember: JNLP agents connect to the master, not the other way around. Add it to the shared-cloud pool (via ``restart``) after CJOC is up and running.*
+3. Launch JNLP agents into the Shared Cloud:
+
+        make jnlp-slave
+
+4. Finally, destroy all JNLP slaves:
+
+        make destroy-jnlp
 
 ## What Next?
 
@@ -124,13 +138,17 @@ When executing a ``docker`` command from within these containers, the Docker cli
 
 ### Pro tips
 
-* Use ``⌃ + C`` to stop the environment, or better, use:
+* Shut down everything via:
 
         docker-compose down
 
+        make destroy-jnlp
+
+        make clean
+
 * Clean your environment often (free disk space, fix "strange" issues) with:
 
-        ./docker-clean.sh
+        make clean
 
 * Open an interactive terminal on a container (service) with:
 
