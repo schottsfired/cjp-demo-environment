@@ -144,8 +144,6 @@ When executing a ``docker`` command from within these containers, the Docker cli
 
         make destroy-jnlp
 
-        make clean
-
 * Clean your environment often (free disk space, fix "strange" issues) with:
 
         make clean
