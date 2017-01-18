@@ -118,6 +118,10 @@ Automate all the things!
 
 ## Miscellaneous
 
+### Upgrades
+
+Please refer to the [Releases Page](https://github.com/schottsfired/cjp-demo-environment/releases) for upgrade instructions.
+
 ### Docker on Docker (a.k.a "Docker inception")
 
 Is supported by the following services:
