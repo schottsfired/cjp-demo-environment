@@ -6,18 +6,15 @@ Feel free to clone/fork/extend this repo to meet your specific needs, and shoot 
 
 My goal for this repo is to help people learn about CloudBees Jenkins and Docker while journeying through the README below.
 
-*DISCLAIMER: Not officially suppported by CloudBees. A very cool, pre-configured Docker trial is available [here](https://www.cloudbees.com/get-started) on the CloudBees website.*
-
 ## What does this include?
-* Nginx reverse proxy at http://cjp.local
+* Nginx reverse proxy at http://cjp.local (404 means it's running, home page is TODO)
 * CloudBees Jenkins Operations Center (CJOC) at http://cjp.local/cjoc
 * CloudBees Jenkins Enterprise (CJE) "prod" at http://cjp.local/cje-prod
 * CloudBees Jenkins Enterprise (CJE) "test" at http://cjp.local/cje-test
-* An *shared* SSH agent based on [jenkinsci/ssh-slave](https://hub.docker.com/r/jenkinsci/ssh-slave/)
-* A *shared* Cloud and the ability to spawn JNLP agents based on [cloudbees/jnlp-slave-with-java-build-tools](https://hub.docker.com/r/cloudbees/jnlp-slave-with-java-build-tools/)
-* Support for Docker on Docker
+* A Docker-enabled, shared SSH agent based on [jenkinsci/ssh-slave](https://hub.docker.com/r/jenkinsci/ssh-slave/)
+* The ability to spawn Docker-enabled, shared JNLP agents based on [cloudbees/jnlp-slave-with-java-build-tools](https://hub.docker.com/r/cloudbees/jnlp-slave-with-java-build-tools/)
 
-*NOTE: All services are intended to run on the same host in this example.*
+*NOTE: All services are intended to run on the same host in this example, but similar practices can be applied to e.g. Docker Swarm (multi host) setups.*
 
 ## Prerequisites
 
@@ -37,39 +34,35 @@ Go get [Docker for Mac Beta](https://blog.docker.com/2016/03/docker-for-mac-wind
 
 3. Create a file called ``.env`` in the project directory (alongside ``docker-compose.yml``) and copy everything into it from the provided ``.env.sample``. Update the ``MAVEN_CACHE`` so that it's specific to your environment. If you don't have a Maven cache, or want to use additional/other caches, then update (or remove) the ``ssh-slave:`` ``volumes:`` in ``docker-compose.yml`` accordingly. For now this is the only change needed in ``.env``.
 
-4. Create a Docker network for this environment:
+4. Create a Docker network by running this from the project directory:
 
         make network
 
-## How to run
+## How to run (and restart after shutting down)
 
 Simply,
 
     docker-compose up -d
 
-..from the project directory, and wait a little while :)
+..from the project directory, and wait a while :)
 
 You can view logs (and safely ctrl+c out of them) via:
 
     docker-compose logs -t -f
 
-Important directories like JENKINS_HOME(s), Nginx logs, etc. are volume mapped (persisted) to the working project directory. Treat JENKINS_HOME directories (``<project-name>/data/...``) with care, and consider backups.
+Important directories like JENKINS_HOME(s), Nginx logs, etc. are volume mapped (persisted) to the working project directory. Treat JENKINS_HOME directories (under ``./data/...``) with care, and consider regular backups.
 
-## Post-Startup Tasks
+## Post-Startup Checklist
 
-### Connect Client Masters
+### Connect Client Masters (one time)
 
-1. Go to http://cjp.local/cjoc
+1. Activate CJOC at http://cjp.local/cjoc using the recommended settings
 
-2. Activate
+2. Follow the same process for http://cjp.local/cje-prod and http://cjp.local/cje-test, again with recommended settings
 
-3. Click Manage Jenkins > Configure System and set the Jenkins URL to http://cjp.local/cjoc (or just _save_ if it's already correct)
+3. In CJOC, create Client Master items for ``cje-prod`` and ``cje-test``, and use the URLs from step 2 to make the connection
 
-4. Add a Client Master item named e.g. ``cje-prod`` with URL http://cjp.local/cje-prod.
-
-5. Add a Client Master item named e.g. ``cje-test`` with URL  http://cjp.local/cje-test.
-
-### Connect SSH Shared Agent
+### Connect ssh-slave as a Shared Slave (one time)
 
 1. `` exec `` into the CJOC container and generate a key pair:
 
@@ -93,7 +86,7 @@ Important directories like JENKINS_HOME(s), Nginx logs, etc. are volume mapped (
 
 6. Create a Shared Slave item in CJOC (named e.g. ``shared-ssh-agent``), using the credentials above, host: ``ssh-slave``, and a Remote FS root of ``/home/jenkins``. Give it some labels, like ``shared``, ``ssh``, ``docker``, ``docker-cloud``.
 
-### Add JNLP Agent(s) to a Shared Cloud
+### Add JNLP Agent(s) to a Shared Cloud (config once, then repeat step 3)
 
 1. Add a Shared Cloud item in CJOC (named e.g. `` shared-cloud ``). Remote FS root is ``/home/jenkins``. Give it some labels, like ``shared``, ``jnlp``, ``java-build-tools``, ``docker``, ``docker-cloud`` and click Save. You should now be taken to a screen that displays the slave command to run.
 
@@ -103,7 +96,7 @@ Important directories like JENKINS_HOME(s), Nginx logs, etc. are volume mapped (
 
         make build-jnlp-slave
 
-3. Launch JNLP agents into the Shared Cloud:
+3. Launch a JNLP agent into the Shared Cloud, repeatedly if desired:
 
         make jnlp-slave
 
@@ -121,7 +114,7 @@ Automate all the things!
 * [CloudBees Docker Build and Publish](https://wiki.jenkins-ci.org/display/JENKINS/CloudBees+Docker+Build+and+Publish+plugin)
 * [CloudBees Docker Custom Build Environment](https://wiki.jenkins-ci.org/display/JENKINS/CloudBees+Docker+Custom+Build+Environment+Plugin)
 * [CloudBees Docker Pipeline](https://wiki.jenkins-ci.org/display/JENKINS/CloudBees+Docker+Pipeline+Plugin)
-* [Docker Slaves Plugin](https://wiki.jenkins-ci.org/display/JENKINS/Docker+Slaves+Plugin) (use in tandem with ``docker-service``)
+* [Docker Slaves Plugin](https://wiki.jenkins-ci.org/display/JENKINS/Docker+Slaves+Plugin) (use in tandem with ``docker-service`` in ``docker-compose.yml``)
 
 ## Miscellaneous
 
@@ -137,21 +130,28 @@ Is supported by the following services:
 When executing a ``docker`` command from within these containers, the Docker client installed inside the container communicates with the  Docker server outside the container. This magic is provided by Docker socket volume mapping; see ``-v /var/run/docker.sock:/var/run/docker.sock`` in ``docker-compose.yml``. For more information, read [this famous blog post](https://jpetazzo.github.io/2015/09/03/do-not-use-docker-in-docker-for-ci/).
 
 ### Pro tips
+* See what's running:
 
-* Shut down everything via:
+        docker ps
+
+* Shutdown command(s):
 
         docker-compose down
 
         make destroy-jnlp
 
-* Clean your environment often (free disk space, fix "strange" issues) with:
+* Clean Docker after shutting down:
 
         make clean
 
-* Open an interactive terminal on a container (service) with:
+* Tail the logs for a running container:
 
-        docker exec -it <containerName/serviceName> bash
+        docker logs -f $CONTAINER_NAME_OR_ID
 
-* Or run a command within a container immediately, e.g. to ping another container (thank you Docker 1.12 :)
+* Open an interactive terminal on a running container:
 
-        docker exec -it <containerName/serviceName> ping cjp.proxy
+        docker exec -it $CONTAINER_NAME_OR_ID bash
+
+* Run a command within a container immediately, e.g. to test networking
+
+        docker exec -it $CONTAINER_NAME_OR_ID ping cjp.proxy
