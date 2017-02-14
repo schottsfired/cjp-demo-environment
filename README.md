@@ -86,7 +86,7 @@ Important directories like JENKINS_HOME(s), Nginx logs, etc. are volume mapped (
 
 6. Create a Shared Slave item in CJOC (named e.g. ``shared-ssh-agent``), using the credentials above, host: ``ssh-slave``, and a Remote FS root of ``/home/jenkins``. Give it some labels, like ``shared``, ``ssh``, ``docker``, ``docker-cloud``.
 
-### Add JNLP Agent(s) to a Shared Cloud (config once, then repeat step 3)
+### Add JNLP Agent(s) to a Shared Cloud (config once, then repeat step 4)
 
 1. Add a Shared Cloud item in CJOC (named e.g. `` shared-cloud ``). Remote FS root is ``/home/jenkins``. Give it some labels, like ``shared``, ``jnlp``, ``java-build-tools``, ``docker``, ``docker-cloud`` and click Save. You should now be taken to a screen that displays the slave command to run.
 
