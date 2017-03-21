@@ -31,9 +31,11 @@ build-swarm-agent:
 swarm-agent:
 	docker run -d \
 	--network=cjp-demo-environment \
-	-v /var/run/docker.sock:/var/run/docker.sock \
 	swarm-agent \
-	java -jar swarm-client-3.3.jar
+	java -jar swarm-client-3.3.jar 
+	-master $(SWARM_MASTER) \
+	-username $(SWARM_USER) \
+	-password $(SWARM_PASS)
 
 destroy-swarm-agents:
 	docker rm $$(docker stop $$(docker ps -a -q --filter="ancestor=swarm-agent"))
