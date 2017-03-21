@@ -32,7 +32,7 @@ swarm-agent:
 	docker run -d \
 	--network=cjp-demo-environment \
 	swarm-agent \
-	java -jar swarm-client-3.3.jar 
+	java -jar swarm-client-3.3.jar \
 	-master $(SWARM_MASTER) \
 	-username $(SWARM_USER) \
 	-password $(SWARM_PASS)
