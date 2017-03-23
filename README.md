@@ -154,7 +154,7 @@ When executing a ``docker`` command from within these containers, the Docker cli
 
 * Open an interactive terminal on a running container:
 
-        docker exec -it $CONTAINER_NAME_OR_ID bash
+        docker exec -it $CONTAINER_NAME_OR_ID sh
 
 * Run a command within a container immediately, e.g. to test networking
 
