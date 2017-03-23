@@ -18,7 +18,7 @@ My goal for this repo is to help people learn about CloudBees Jenkins and Docker
 
 ## Prerequisites
 
-Go get [Docker for Mac Beta](https://blog.docker.com/2016/03/docker-for-mac-windows-beta/).
+Go get [Docker for Mac](https://docs.docker.com/docker-for-mac/).
 
 *NOTE: Docker on Docker support has not been tested on other platforms.*
 
@@ -32,6 +32,20 @@ Go get [Docker for Mac Beta](https://blog.docker.com/2016/03/docker-for-mac-wind
 
         127.0.0.1 cjp.local
 
+	so that your host file will look like the following example:
+	
+		##
+		# Host Database
+		#
+		# localhost is used to configure the loopback interface
+		# when the system is booting.  Do not change this entry.
+		##
+		127.0.0.1       localhost
+		127.0.0.1       cjp.local
+		255.255.255.255 broadcasthost
+		::1             localhost	
+
+
 3. Create a file called ``.env`` in the project directory (alongside ``docker-compose.yml``) and copy everything into it from the provided ``.env.sample``. Update the ``MAVEN_CACHE`` so that it's specific to your environment. If you don't have a Maven cache, or want to use additional/other caches, then update (or remove) the ``ssh-slave:`` ``volumes:`` in ``docker-compose.yml`` accordingly. For now this is the only change needed in ``.env``.
 
 4. Create a Docker network by running this from the project directory:
@@ -40,7 +54,7 @@ Go get [Docker for Mac Beta](https://blog.docker.com/2016/03/docker-for-mac-wind
 
 ## How to run (and restart after shutting down)
 
-Simply,
+Simply type the following command
 
     docker-compose up -d
 

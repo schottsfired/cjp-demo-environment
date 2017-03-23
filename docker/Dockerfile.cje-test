@@ -1,4 +1,4 @@
-FROM cloudbees/jenkins-enterprise:2.32.2.6
+FROM cloudbees/jenkins-enterprise:2.32.2.7
 
 #add Docker
 USER root

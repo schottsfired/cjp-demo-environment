@@ -22,6 +22,23 @@ jnlp-slave:
 
 destroy-jnlp:
 	docker rm $$(docker stop $$(docker ps -a -q --filter="ancestor=jnlp-slave"))
+	
+build-swarm-agent:
+	docker build --rm \
+	-f docker/Dockerfile.swarm-agent \
+	-t swarm-agent .
+	
+swarm-agent:
+	docker run -d \
+	--network=cjp-demo-environment \
+	swarm-agent \
+	java -jar swarm-client-3.3.jar \
+	-master $(SWARM_MASTER) \
+	-username $(SWARM_USER) \
+	-password $(SWARM_PASS)
+
+destroy-swarm-agents:
+	docker rm $$(docker stop $$(docker ps -a -q --filter="ancestor=swarm-agent"))
 
 clean:
 	./docker-clean.sh
