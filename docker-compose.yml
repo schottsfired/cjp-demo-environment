@@ -6,22 +6,22 @@ networks:
       name: cjp-demo-environment
 
 services:
-  # https://hub.docker.com/_/nginx/
+  #https://hub.docker.com/_/nginx/
   proxy:
     container_name: cjp.local
     image: nginx:1.10-alpine
     ports:
       - "80:80"
-      # - "443:443"
+      #- "443:443"
     volumes:
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
       - ./nginx/logs:/var/log/nginx
-    depends_on: # to force proxy to start behind
+    depends_on: #to force proxy to start behind
       - cjoc
       - cje-test
       - cje-prod
 
-  # https://hub.docker.com/r/cloudbees/jenkins-operations-center/
+  #https://hub.docker.com/r/cloudbees/jenkins-operations-center/
   cjoc:
     container_name: cjoc
     image: cloudbees/jenkins-operations-center:2.46.2.1
@@ -34,10 +34,8 @@ services:
         -Dhudson.udp=-1
         -Dhudson.DNSMultiCast.disabled=true
         -Djava.awt.headless=true
-        -Xmx1024m
-        -Xms512m
         -Dorg.apache.commons.jelly.tags.fmt.timeZone=America/New_York"
-      # https://wiki.jenkins-ci.org/display/JENKINS/Features+controlled+by+system+properties
+      #https://wiki.jenkins-ci.org/display/JENKINS/Features+controlled+by+system+properties
       JENKINS_OPTS: "--prefix=/cjoc"
     volumes:
       - ./data/cjoc:/var/jenkins_home
@@ -55,8 +53,6 @@ services:
         -Dhudson.udp=-1
         -Dhudson.DNSMultiCast.disabled=true
         -Djava.awt.headless=true
-        -Xmx2048m
-        -Xms1024m
         -Dorg.apache.commons.jelly.tags.fmt.timeZone=America/New_York
         "
       JENKINS_OPTS: "--prefix=/cje-prod"
@@ -80,8 +76,6 @@ services:
         -Dhudson.udp=-1
         -Dhudson.DNSMultiCast.disabled=true
         -Djava.awt.headless=true
-        -Xmx2048m
-        -Xms1024m
         -Dorg.apache.commons.jelly.tags.fmt.timeZone=America/New_York
         "
       JENKINS_OPTS: "--prefix=/cje-test"
@@ -90,20 +84,20 @@ services:
     volumes_from:
       - ssh-slave
 
-  # https://hub.docker.com/r/jenkinsci/ssh-slave/
+  #https://hub.docker.com/r/jenkinsci/ssh-slave/
   ssh-slave:
     container_name: ssh-slave
     build:
       context: ./docker/
       dockerfile: Dockerfile.ssh-slave
-    # command is specific to your env.. see README
+    #command is specific to your env.. see README
     command: ["${SSH_SLAVE_COMMAND}"]
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock # for DonD
-      - ${MAVEN_CACHE} # to persist and share the precious maven cache
+      - ${MAVEN_CACHE} #to persist and share the precious maven cache
 
-  # https://hub.docker.com/r/verb/socat/
-  # clever way to expose host docker engine to internal services
+  #https://hub.docker.com/r/verb/socat/
+  #clever way to expose host docker engine to internal services
   docker-service:
     container_name: docker-service
     image: verb/socat:alpine
