@@ -39,6 +39,7 @@ services:
       JENKINS_OPTS: "--prefix=/cjoc"
     volumes:
       - ./data/cjoc:/var/jenkins_home
+      - ./data/backups:/backups
 
   # https://hub.docker.com/r/cloudbees/jenkins-enterprise/
   cje-prod:
@@ -58,6 +59,7 @@ services:
       JENKINS_OPTS: "--prefix=/cje-prod"
     volumes:
       - ./data/cje-prod:/var/jenkins_home
+      - ./data/backups:/backups
     volumes_from:
       - ssh-slave
 
@@ -81,6 +83,7 @@ services:
       JENKINS_OPTS: "--prefix=/cje-test"
     volumes:
       - ./data/cje-test:/var/jenkins_home
+      - ./data/backups:/backups
     volumes_from:
       - ssh-slave
 
