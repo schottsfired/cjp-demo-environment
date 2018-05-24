@@ -51,12 +51,15 @@ Go get [Docker for Mac](https://docs.docker.com/docker-for-mac/).
 4. Create a Docker network by running this from the project directory:
 
         make network
+        #In ubnutu 16.04 you may need to execute it with root permissions.
+
 
 ## How to run (and restart after shutting down)
 
 Simply type the following command
 
     docker-compose up -d
+    #In ubnutu 16.04 may fail, go to the ./data/ folder created and provide permissions to rw to other users.
 
 ..from the project directory, and wait a while :)
 
