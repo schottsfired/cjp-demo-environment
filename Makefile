@@ -8,7 +8,7 @@ network:
 build-jnlp-slave:
 	docker build --rm \
 	-f docker/Dockerfile.jnlp-slave \
-	-t jnlp-slave .
+	-t jnlp-slave ./docker
 
 jnlp-slave:
 	docker run -d \
