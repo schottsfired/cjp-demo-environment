@@ -86,17 +86,13 @@ Important directories like JENKINS_HOME(s), Nginx logs, etc. are volume mapped (
 
 2. Stick with the defaults and choose a password (or leave blank).
 
-3. Copy your public key to a text editor:
+3. Copy your private key to a text editor:
 
-        cd /var/jenkins_home/.ssh
+        cat /var/jenkins_home/.ssh/id_rsa
 
-        cat id_rsa.pub
+4. In CJOC, click "Credentials", "System", "Global credentials (unrestricted)", "Add Credentials", select ``SSH Username with private key``. Enter ``jenkins`` as the username and select ``Enter Directly`` for the Private key option.
 
-4. In CJOC, click "Credentials", "System", "Global credentials (unrestricted)", "Add Credentials", select ``SSH Username with private key``. Enter ``jenkins`` as the username and select ``From the Jenkins master ~/.ssh`` for the Private key option.
-
-5. In ``.env``, replace ``SSH_SLAVE_COMMAND`` with the public key that was just generated, save, and restart the container:
-
-        docker-compose restart ssh-slave
+5. In ``.env``, replace ``SSH_SLAVE_COMMAND`` with the public key that was just generated, save, and refresh the environment with ``docker-compose up``
 
 6. Create a Shared Slave item in CJOC (named e.g. ``shared-ssh-agent``), using the credentials above, host: ``ssh-slave``, and a Remote FS root of ``/home/jenkins``. Give it some labels, like ``shared``, ``ssh``, ``docker``, ``docker-cloud``.
 
