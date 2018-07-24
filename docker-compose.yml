@@ -6,9 +6,10 @@ networks:
       name: cjp-demo-environment
 
 services:
-  #https://hub.docker.com/_/nginx/
+  
   proxy:
     container_name: cjp.local
+    #https://hub.docker.com/_/nginx/
     image: nginx:1.10-alpine
     ports:
       - "80:80"
@@ -16,18 +17,19 @@ services:
     volumes:
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
       - ./nginx/logs:/var/log/nginx
-    depends_on: #to force proxy to start behind
+    depends_on: #to force proxy to start after:
       - cjoc
       - cje-test
       - cje-prod
 
-  #https://hub.docker.com/r/cloudbees/jenkins-operations-center/
   cjoc:
     container_name: cjoc
-    image: cloudbees/jenkins-operations-center:2.107.2.1
+    #https://hub.docker.com/r/cloudbees/jenkins-operations-center/
+    image: cloudbees/jenkins-operations-center:2.121.1.2
     environment:
       JENKINS_SLAVE_AGENT_PORT: "50000"
       JENKINS_HA: "false"
+      #https://wiki.jenkins-ci.org/display/JENKINS/Features+controlled+by+system+properties
       JAVA_OPTS: "
         -Dhudson.TcpSlaveAgentListener.hostName=cjoc
         -Dhudson.TcpSlaveAgentListener.port=50000
@@ -35,16 +37,15 @@ services:
         -Dhudson.DNSMultiCast.disabled=true
         -Djava.awt.headless=true
         -Dorg.apache.commons.jelly.tags.fmt.timeZone=America/New_York"
-      #https://wiki.jenkins-ci.org/display/JENKINS/Features+controlled+by+system+properties
       JENKINS_OPTS: "--prefix=/cjoc"
     volumes:
       - ./data/cjoc:/var/jenkins_home
       - ./data/backups:/backups
 
-  # https://hub.docker.com/r/cloudbees/jenkins-enterprise/
   cje-prod:
     container_name: cje-prod
-    image: cloudbees/jenkins-enterprise:2.107.2.1
+    #https://hub.docker.com/r/cloudbees/jenkins-enterprise/
+    image: cloudbees/jenkins-enterprise:2.121.1.2
     environment:
       JENKINS_SLAVE_AGENT_PORT: "50000"
       JENKINS_HA: "false"
@@ -63,12 +64,11 @@ services:
     volumes_from:
       - ssh-slave
 
-  # https://hub.docker.com/r/cloudbees/jenkins-enterprise/
   cje-test:
     container_name: cje-test
     build:
       context: ./docker/
-      dockerfile: Dockerfile.cje-test
+      dockerfile: Dockerfile.cje-test #based on the same image as cje-prod
     environment:
       JENKINS_SLAVE_AGENT_PORT: "50000"
       JENKINS_HA: "false"
@@ -87,16 +87,15 @@ services:
     volumes_from:
       - ssh-slave
 
-  #https://hub.docker.com/r/jenkinsci/ssh-slave/
   ssh-slave:
     container_name: ssh-slave
     build:
       context: ./docker/
       dockerfile: Dockerfile.ssh-slave
-    #command is specific to your env.. see README
+    #this part is specific to your environment.. see README
     command: ["${SSH_SLAVE_COMMAND}"]
     volumes:
-      - /var/run/docker.sock:/var/run/docker.sock # for DonD
+      - /var/run/docker.sock:/var/run/docker.sock #aka "docker socket volume mapping"
       - ${MAVEN_CACHE} #to persist and share the precious maven cache
 
   #https://hub.docker.com/r/verb/socat/
