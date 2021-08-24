@@ -25,7 +25,7 @@ services:
   cjoc:
     container_name: cjoc
     #https://hub.docker.com/r/cloudbees/jenkins-operations-center/
-    image: cloudbees/jenkins-operations-center:2.138.1.2
+    image: cloudbees/jenkins-operations-center:2.289.3.2
     environment:
       JENKINS_SLAVE_AGENT_PORT: "50000"
       JENKINS_HA: "false"
@@ -45,7 +45,7 @@ services:
   cje-prod:
     container_name: cje-prod
     #https://hub.docker.com/r/cloudbees/jenkins-enterprise/
-    image: cloudbees/jenkins-enterprise:2.138.1.2
+    image: cloudbees/jenkins-enterprise:2.289.3.2
     environment:
       JENKINS_SLAVE_AGENT_PORT: "50000"
       JENKINS_HA: "false"
