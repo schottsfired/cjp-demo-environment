@@ -1,10 +1,10 @@
 # Docker Compose Demo Environment for CloudBees CI Traditional
 
-A great way to run CloudBees Jenkins on your laptop, with support for "Docker stuff"!
+A great way to run CloudBees CI on your laptop, with support for "Docker stuff"!
 
 Feel free to clone/fork/extend this repo to meet your specific needs, and shoot me a PR if I missed anything!
 
-My goal for this repo is to help people learn about CloudBees Jenkins and Docker while journeying through the README below.
+My goal for this repo is to help people learn about CloudBees CI and Docker while journeying through the README below.
 
 ## What does this include?
 * Nginx reverse proxy at http://cjp.local (404 means it's running, home page is TODO)
