@@ -1,4 +1,4 @@
-# Docker Compose Demo Environment for CloudBees Jenkins Platform
+# Docker Compose Demo Environment for CloudBees CI Traditional
 
 A great way to run CloudBees Jenkins on your laptop, with support for "Docker stuff"!
 
