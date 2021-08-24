@@ -3,25 +3,25 @@ include .env
 default: clean
 
 network:
-	docker network create cjp-demo-environment
+	docker network create cjp-demo-environment || true
 
-build-jnlp-slave:
+build-jnlp-agent:
 	docker build --rm \
-	-f docker/Dockerfile.jnlp-slave \
-	-t jnlp-slave ./docker
+	-f docker/Dockerfile.jnlp-agent \
+	-t jnlp-agent ./docker
 
-jnlp-slave:
+jnlp-agent:
 	docker run -d \
 	--network=cjp-demo-environment \
 	-e "JENKINS_URL=http://cjp.local/cjoc" \
 	-v $(MAVEN_CACHE) \
 	-v /var/run/docker.sock:/var/run/docker.sock \
-	jnlp-slave \
-	$(JNLP_SLAVE_COMMAND) \
+	jnlp-agent \
+	$(JNLP_AGENT_COMMAND) \
 	$(SHARED_CLOUD_NAME)
 
 destroy-jnlp:
-	docker rm $$(docker stop $$(docker ps -a -q --filter="ancestor=jnlp-slave"))
+	docker rm $$(docker stop $$(docker ps -a -q --filter="ancestor=jnlp-agent"))
 	
 build-swarm-agent:
 	docker build --rm \

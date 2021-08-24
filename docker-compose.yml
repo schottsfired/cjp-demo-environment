@@ -62,7 +62,7 @@ services:
       - ./data/cje-prod:/var/jenkins_home
       - ./data/backups:/backups
     volumes_from:
-      - ssh-slave
+      - ssh-agent
 
   cje-test:
     container_name: cje-test
@@ -85,15 +85,15 @@ services:
       - ./data/cje-test:/var/jenkins_home
       - ./data/backups:/backups
     volumes_from:
-      - ssh-slave
+      - ssh-agent
 
-  ssh-slave:
-    container_name: ssh-slave
+  ssh-agent:
+    container_name: ssh-agent
     build:
       context: ./docker/
-      dockerfile: Dockerfile.ssh-slave
+      dockerfile: Dockerfile.ssh-agent
     #this part is specific to your environment.. see README
-    command: ["${SSH_SLAVE_COMMAND}"]
+    command: ["${SSH_AGENT_COMMAND}"]
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock #aka "docker socket volume mapping"
       - ${MAVEN_CACHE} #to persist and share the precious maven cache
