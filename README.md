@@ -64,13 +64,19 @@ You can view logs (and safely ctrl+c out of them) via:
 
     docker-compose logs -t -f
 
+To stop all runnning containers, run the following command:
+
+    docker-compose down
+
 Important directories like JENKINS_HOME(s), Nginx logs, etc. are volume mapped (persisted) to the working project directory. Treat JENKINS_HOME directories (under ``./data/...``) with care, and consider regular backups.
 
 ## Post-Startup Checklist
 
 ### Connect Client Controllers (one time)
 
-1. Activate CJOC at http://cjp.local/cjoc using the recommended settings
+1. Navigate to CJOC at http://cjp.local/cjoc and retrieve the initial admin password using ``docker exec -it cjoc cat /var/jenkins_home/secrets/initialAdminPassword``
+
+1. Activate CJOC using the recommended settings
 
 2. Follow the same process for http://cjp.local/cje-prod and http://cjp.local/cje-test, again with recommended settings
 
